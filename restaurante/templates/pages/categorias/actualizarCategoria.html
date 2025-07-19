@@ -1,0 +1,36 @@
+{% extends "../../base.html" %}
+{% load static %}
+{% block title %}Actualizar Categoría{% endblock %}
+{% block content %}
+    <div class='dark:bg-secondary-100 p-8 rounded-xl shadow-2xl'>
+      <h1 class='text-3xl text-gray-600 font-bold'>Actualizar Categoría</h1>
+      <hr class='my-5 border-gray-500/30' />
+
+      <form onSubmit="" encType='multipart/form-data' action="" method="post">
+        {% csrf_token %}
+
+        <div class='flex items-center mb-8'>
+          <div class='w-1/4'>
+            <p>Nombre <span class='text-red-600'>*</span></p>
+          </div>
+          <div class='flex-1 flex items-center gap-4'>
+            <div class='w-full'>
+              <input type="text" name="nombre" value="{{ categoria.nombre }}" required class='w-full py-2 px-4 outline-none rounded-lg dark:bg-secondary-900 bg-gray-300' placeholder='Nombre' />
+            </div>
+          </div>
+        </div>
+
+        <hr class='my-8 border-gray-500/30' />
+
+        <div class='flex justify-end gap-4'>
+          <button type="submit" class='bg-orange-500 text-white py-2 cursor-pointer px-4 rounded-lg hover:bg-orange-600 transition-colors'>Guardar</button>
+
+          <a href="{% url 'listar_categorias' %}" class='bg-red-500 text-white py-2 cursor-pointer px-4 rounded-lg hover:bg-red-600 transition-colors'>Cancelar</a>
+        </div>
+      </form>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static "js/imagen.js" %}"></script>
+{% endblock %}

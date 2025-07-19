@@ -1,0 +1,108 @@
+{% extends "../../base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="container mx-auto p-4 max-w-full rounded-md shadow-md">
+
+        <div class="flex justify-between items-center mb-5">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">Platillos Inactivos</h1>
+                <p class="text-gray-600">Platillos Inactivos Disponibles</p>
+            </div>
+
+            <input 
+                id="searchTerm"
+                onkeyup="doSearch()"
+                placeholder='Search by name...'
+                value=""
+                class='p-2 bg-gray-300 outline-none rounded-lg w-[18%]'
+                onChange=""
+            />
+
+            <select id="filtroCategoria" class="p-2 bg-gray-300 outline-none rounded-lg w-[18%] text-gray-700" onchange="filtrarProductos()">
+                <option value="">Filtrar por categoría</option>
+                {% for categoria in categorias %}
+                <option value="{{ categoria.categoriaid }}">{{ categoria.nombre }}</option>
+                {% endfor %}
+            </select>
+
+        </div>
+
+        <hr class=' border-gray-500/30 mb-4 border-b-2' />
+
+        <div id="productos-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 auto-rows-max overflow-y-auto p-2 rounded-lg">
+            
+            {% for plato in platos %}
+            <div class="flex flex-col justify-between rounded-lg">
+
+                <div class="flex-1 object-contain relative bg-gradient-to-tr from-gray-100 via-gray-300/90 to-gray-100 text-gray-800 rounded-lg rounded-b-none">
+                    {% comment %} <img src="{% static 'image/pulpo.avif' %}" alt="defaultImage" class="object-contain w-full h-32 rounded-lg rounded-b-none" /> {% endcomment %}
+                    <img src="{% static 'productos/' %}{{ plato.rutafoto }}?v={{ plato.updated_at.timestamp }}" class="object-contain w-full h-32 rounded-lg rounded-b-none">
+
+                    <!-- Ícono de ojo -->
+                    <button class="ver-detalles absolute top-2 right-2 p-1 bg-opacity-90 rounded-full cursor-pointer transition-all duration-200 hover:scale-110"
+                            data-nombre="${plato.nombre}" 
+                            data-categoria="${plato.categoria || ''}" 
+                            data-descripcion="${plato.descripcion || 'Sin descripción'}"
+                            data-imagen="${plato.imagen}">
+                        <svg fill="none" class="w-5 h-5" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5s8.268 2.943 9.542 7c-1.274 4.057-5.065 7-9.542 7s-8.268-2.943-9.542-7z" />
+                        </svg>
+                    </button>
+                </div>
+
+
+                <div class="flex flex-col items-center justify-between p-2 bg-white rounded-lg rounded-t-none shadow-md">
+                    <div class="w-full flex items-center justify-center">
+                        <h1 class="font-black text-xl">{{ plato.nombre }}</h1>
+                    </div>
+                    <div class="flex flex-row w-full items-center justify-between mt-2">
+                        <div class="flex flex-col items-center justify-between">
+                            <span class="font-black text-3xl text-green-600">C$ {{ plato.precio }}</span>
+                        </div>
+
+                        <div class="flex">
+                            <a href="#" onclick="activarPlato({{ plato.platoid }})" class="btn w-full" alt="Activar Platillo">
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-11 rounded-lg text-amber-300 hover:bg-gray-300 p-2 w-full">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                                </svg>
+                            </a>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>  
+            {% endfor %}
+            
+        </div>
+
+            <div class='flex justify-end gap-4 mx-10'>
+                <a href="{% url 'listar_platos' %}" class='bg-red-500 text-white py-2 cursor-pointer px-4 rounded-lg hover:bg-red-600 transition-colors'>Cancelar</a>
+            </div>
+
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    function getCSRFToken() {
+    return document.querySelector('[name=csrfmiddlewaretoken]').value;
+    }
+</script>
+
+<script>
+  // Esto estará disponible para tu JS externo
+  const defaultImageUrl = "{% static 'image/defaultImage.png' %}";
+</script>
+
+{% comment %} <script src="{% static 'js/agregarPlatillo.js' %}"></script> {% endcomment %}
+<script src="{% static "js/activar.js" %}"></script>
+<script src="{% static "js/search.js" %}"></script>
+{% endblock %}

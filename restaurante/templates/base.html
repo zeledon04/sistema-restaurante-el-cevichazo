@@ -1,0 +1,74 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cevichazo</title>
+    <link rel="icon" href="{% static '/image/logo.ico' %}" type="image/x-icon" />
+    <meta name="csrf-token" content="{{ csrf_token }}" />
+    <script src="{% static 'sweetalert/sweetalert2.all.js' %}"></script>
+    <script src="{% static 'sweetalert/sweetalert2.all.min.js' %}"></script>
+    <script src="{% static 'sweetalert/sweetalert2.js' %}"></script>
+    <script src="{% static 'sweetalert/sweetalert2.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'sweetalert/sweetalert2.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'sweetalert/sweetalert2.css' %}" />
+    <link rel="stylesheet" href="{% static 'dist/styles.css' %}" />
+    
+  </head>
+
+ 
+  <body class="text-gray-300">
+    <div class="bg-gray-900 dark:bg-gray-500">
+      <div class="min-h-screen grid grid-cols-1 xl:grid-cols-6">
+        {% include 'components/sidebar.html' %}
+        <div class="xl:col-span-5 bg-gray-100">
+          {% include 'components/header.html' %}
+          <div class="h-[90vh] overflow-y-auto px-4 pb-4 text-gray-700 pt-4">
+            {% block content %}
+
+            {% endblock %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="{% static 'js/sidebar.js' %}"></script>
+    <script src="{% static 'js/showNotifications.js' %}"></script>
+    <script src="{% static 'js/chart.umd.js' %}"></script>
+
+    {% block scripts %}
+
+    {% endblock %}
+
+    {% if messages %}
+      {% for message in messages %}
+        <script>
+          Swal.fire({
+            title: '{{ message }}',
+            icon: '{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}error{% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}success{% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}warning{% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}info{% else %}question{% endif %}'
+          })
+        </script>
+      {% endfor %}
+    {% endif %}
+  </body>
+
+  <style>
+    .rotate {
+      transform: rotate(90deg);
+    }
+  </style> 
+</html>
+
+{% comment %} <div class="xl:col-span-3 space-y-4 p-4 md:p-6 max-h-[95vh] lg:p-2 rounded-xl shadow-2xl border border-gray-300">
+  <div></div>
+  
+  <div id="productos-container" class=" bg-red-300 overflow-auto max-h-[95vh] grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-2 p-2 rounded-lg">
+    <div class="flex flex-col justify-between rounded-lg shadow-sm"></div>
+    <div class="flex flex-col justify-between rounded-lg shadow-sm"></div>
+    <div class="flex flex-col justify-between rounded-lg shadow-sm"></div>
+    <div class="flex flex-col justify-between rounded-lg shadow-sm"></div>
+    <div class="flex flex-col justify-between rounded-lg shadow-sm"></div>
+  </div>
+</div> {% endcomment %}

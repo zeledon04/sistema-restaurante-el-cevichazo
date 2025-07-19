@@ -1,0 +1,104 @@
+{% extends "../../base.html" %}
+{% block title %}Historial de Cajas{% endblock %}
+{% load static %}
+{% block content %}
+<div class="p-5 rounded-xl shadow-2xl border border-gray-300 h-[98%] flex flex-col">
+
+    <div class='flex justify-between items-center mb-5'>
+        <h1 class='text-3xl text-gray-600 font-bold'>Historial de Cajas</h1>
+    </div>
+
+    <hr class=' border-gray-500/30' />
+
+    <div class="rounded-tr-lg rounded-tl-lg overflow-y-auto flex-1 min-h-0">
+  
+        <table id="datos" class="w-full table-fixed border-collapse mb-5 rounded-lg">
+            <thead class="sticky top-0 bg-gray-100 z-10 p-3 border border-t-0 border-l-0 border-r-0 border-b-gray-200">
+                <tr class="">
+                    <th class="p-2">#</th>
+                    <th class="p-2">Usuario</th>
+                    <th class="p-2">F.Apert</th>
+                    <th class="p-2">F.Cierre</th>
+                    <th class="p-2">C$ Apert</th>
+                    <th class="p-2">$ Apert</th>
+                    <th class="p-2">C$ Cierre</th>
+                    <th class="p-2">$ Cierre</th>
+                    <th class="p-2">Ingresos</th>
+                    <th class="p-2">Sobrante</th>
+                    <th class="p-2">Faltante</th>
+                    <th class="p-2">Detalles</th>
+                </tr>
+            </thead>
+            <tbody class="p-2 rounded-lg w-full">
+            {% comment %}
+                {% for caja in cajas %} 
+                <tr class="main-row hover:bg-gray-200 rounded-lg transition-colors main-row" data-vendedor="{{ factura.usuarioid.usuarioid }}">
+                    <td class="p-2 text-center">{{ caja.cont }}</td>
+                    <td class="p-2 text-center">{{ caja.usuarioid.nombre }}</td>
+                    <td class="p-2 text-center">{{ caja.fechaapertura }}</td>
+                    <td class="p-2 text-center">{{ caja.fechaciere }}</td>
+                    <td class="p-2 text-center">C${{ caja.cordobasinicial|floatformat:2  }}</td>
+                    <td class="p-2 text-center">${{ caja.dolaresinicial|floatformat:2 }}</td>
+                    <td class="p-2 text-center">C${{ caja.cordobasfinal|floatformat:2  }}</td>
+                    <td class="p-2 text-center">${{ caja.dolaresfinal|floatformat:2  }}</td>
+                    <td class="p-2 text-center">C${{ caja.totalingresos|floatformat:2 }}</td>
+                    <td class="p-2 text-center">C${{ caja.sobrante|floatformat:2 }}</td>
+                    <td class="p-2 text-center">C${{ caja.faltante|floatformat:2 }}</td>
+                    <td class="p-2 text-center">
+                        <a href="{% url 'detalleCaja' caja.cajaid %}" class="text-blue-500 hover:underline">
+                            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-11 rounded-lg text-blue-500 hover:bg-gray-300 p-2 w-full">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            </svg>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %} 
+            {% endcomment %}
+                <tr class="main-row hover:bg-gray-200 rounded-lg transition-colors main-row" data-vendedor="">
+                    <td class="p-2 text-center">1</td>
+                    <td class="p-2 text-center">Juan Hernández</td>
+                    <td class="p-2 text-center">July 16, 2025, 1 p.m.</td>
+                    <td class="p-2 text-center">July 16, 2025, 7:03 p.m.</td>
+                    <td class="p-2 text-center">C$200.00</td>
+                    <td class="p-2 text-center">$0.00</td>
+                    <td class="p-2 text-center">C$1000.00</td>
+                    <td class="p-2 text-center">$0.00</td>
+                    <td class="p-2 text-center">C$0.00</td>
+                    <td class="p-2 text-center">C$800.00</td>
+                    <td class="p-2 text-center">C$0.00</td>
+                    <td class="p-2 text-center">
+                        <a href="#" class="text-blue-500 hover:underline">
+                            <svg  fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-11 rounded-lg text-blue-500 hover:bg-gray-300 p-2 w-full">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            </svg>
+                        </a>
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>   
+    </div>
+    <hr class=' border-gray-500/30'/>
+    <div class="flex justify-center items-center mt-5">
+        {% comment %} {% if cajas.has_previous %} {% endcomment %}
+            <a href="?page=1" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">&laquo; Primero</a>
+            <a href="?page={{ cajas.previous_page_number }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Anterior</a>
+        {% comment %} {% endif %} {% endcomment %}
+
+        {% comment %} <span class="px-3 py-1 bg-gray-100 rounded text-gray-700">Página {{ cajas.number }} de {{ cajas.paginator.num_pages }}</span> {% endcomment %}
+        <span class="px-3 py-1 bg-gray-100 rounded text-gray-700">Página 1 de 4</span>
+        {% comment %} {% if cajas.has_next %} {% endcomment %}
+            <a href="?page={{ cajas.next_page_number }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Siguiente</a>
+            <a href="?page={{ cajas.paginator.num_pages }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Último &raquo;</a>
+        {% comment %} {% endif %} {% endcomment %}
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+{% comment %} <script src="{% static "js/listarCajas.js" %}"></script> {% endcomment %}
+{% endblock %}

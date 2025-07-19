@@ -1,0 +1,52 @@
+{% load static %}
+<div class="shadow-2xl p-8 rounded-xl border bg-white border-gray-300">
+    
+    <div class='h-12 flex items-center justify-between mb-4'>
+
+        <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-4xl p-2 rounded-xl box-content bg-green-500/10 text-green-500">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+        </svg>
+
+        <div class="flex flex-col justify-between items-center text-green-500 rounded-lg transition-colors">
+            {% if caja %}
+            <p> C$ {{ caja.cordobasinicial|floatformat:2 }}</p>
+            <p> $ {{ caja.dolaresinicial|floatformat:2 }}</p>
+            {% else %}
+            <p> C$ 0.0</p>
+            <p> $ 0.0</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="">
+        <h1 class='text-3xl font-bold mb-4 text-gray-700'>Abrir Caja</h1>
+        <div class=" flex items-center gap-2 mb-2 justify-between">
+            <p class='font-semibold text-gray-700'>Hora Apertura:</p>
+            
+            <div class="flex items-center gap-2 ">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-green-500">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                <p id="hora-apertura">
+                    {% if hora %}
+                        {{ hora|date:"h:i A" }}
+                    {% else %}
+                    0m
+                    {% endif %}
+                </p>
+            </div>
+            
+        </div>
+    </div>
+
+    <hr class='border border-dashed border-gray-500/50 my-4' />
+    <div id="btn-abrir-caja" class="flex items-center justify-center bg-gradient-to-r from-green-700 via-green-600 to-green-400 hover:from-green-800 hover:via-green-700 hover:to-green-500 text-white shadow-lg bg-green-600 rounded-lg p-1 mb-2 cursor-pointer hover:bg-green-500 transition-all duration-300 active:scale-95">
+        <a class='font-semibold flex items-center gap-2 text-gray-100 justify-around '>  
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-4xl p-2 rounded-xl box-content text-gray-100">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+            </svg>
+            Abrir Caja
+        </a>
+    </div>
+
+</div>

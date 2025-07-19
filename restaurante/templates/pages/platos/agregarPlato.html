@@ -1,0 +1,94 @@
+{% extends "../../base.html" %}
+{% load static %}
+{% block title %}Agregar Platillo{% endblock %}
+{% block content %}
+    <div class='dark:bg-secondary-100 p-8 rounded-xl shadow-2xl'>
+      <h1 class='text-3xl text-gray-600 font-bold'>Nuevo Platillo</h1>
+      <hr class='my-5 border-gray-500/30' />
+
+      <form onSubmit="" encType='multipart/form-data' action="{% url 'agregar_plato' %}" method="post"> 
+        {% csrf_token %}
+
+                <div class='flex items-center mb-8'>
+          <div class='w-1/4'>
+            <p>Avatar</p>
+          </div>
+          <div class='flex-1'>
+            <div class='relative mb-2'>
+              <img
+                id="preview"
+                src="{% static 'image/defaultImage.png' %}"
+                alt="Imagen_Plato"
+                class='w-28 h-28 object-cover rounded-lg' />
+                <label for="avatar" class=" bg-gray-100 absolute p-1 rounded-full hover:cursor-pointer hover:bg-gray-200 -top-2 left-24">
+                    <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                    </svg>
+                </label>
+                <input type="file" name="rutafoto" id="avatar" class="hidden" accept="image/*">
+            </div>
+          </div>
+        </div>
+
+        <div class='flex items-center mb-8'>
+          <div class='w-1/4'>
+            <p>Nombre <span class='text-red-600'>*</span></p>
+          </div>
+          <div class='flex-1 flex items-center gap-4'>
+            <div class='w-full'>
+              <input type="text" name="nombre" required class='w-full py-2 px-4 outline-none rounded-lg bg-gray-300' placeholder='Nombre' />
+            </div>
+
+          </div>
+        </div>
+
+
+        <div class='flex items-center mb-8'>
+          <div class='w-1/4'>
+            <p>Descripción <span class='text-red-600'>*</span></p>
+          </div>
+          <div class='flex-1 flex items-center gap-4'>
+            <textarea name="descripcion" type="text" class='w-full py-2 px-4 outline-none rounded-lg bg-gray-300 ' placeholder='Descripción'></textarea>
+          </div>
+        </div>
+
+        <div class='flex items-center mb-8'>
+          <div class='w-1/4'>
+            <p>Precio <span class='text-red-600'>*</span></p>
+          </div>
+          <div class='flex-1 flex items-center gap-4'>
+            <div class='w-full'>
+              <input type="number" step="any" name="precio" required class='w-full py-2 px-4 outline-none rounded-lg bg-gray-300' placeholder='Precio del Platillo' />
+            </div>
+
+          </div>
+        </div>
+
+        <div class='flex items-center mb-8'>
+          <div class='w-1/4'>
+            <p>Categoría <span class='text-red-600'>*</span></p>
+          </div>
+          <div class='flex-1 flex items-center gap-4'>
+            <select name="categoriaid" required class='w-full py-2 px-4 outline-none rounded-lg bg-gray-300'>
+              <option value="" disabled selected>Elija su Opcion</option>
+                {% for categoria in categorias %}
+                <option value="{{ categoria.categoriaid }}">{{ categoria.categoriaid }} - {{ categoria.nombre }}</option>
+                {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <hr class='my-8 border-gray-500/30' />
+
+        <div class='flex justify-end gap-4'>
+          <button type="submit" class='bg-orange-500 text-white py-2 cursor-pointer px-4 rounded-lg hover:bg-orange-600 transition-colors'>Guardar</button>
+
+          <a href="{% url 'listar_platos' %}" class='bg-red-500 text-white py-2 cursor-pointer px-4 rounded-lg hover:bg-red-600 transition-colors'>Cancelar</a>
+        </div>
+      </form>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static "js/imagen.js" %}"></script>
+{% endblock %}

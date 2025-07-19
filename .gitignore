@@ -1,0 +1,25 @@
+# .gitignore para Django
+
+# Ignorar el entorno virtual
+venv/
+# Archivos de base de datos
+*.db
+*.sqlite3
+# Archivos de compilación de Python
+*.py[cod]
+*.pyc
+*.pyo
+*.pyd
+*.pot
+__pycache__
+# Archivos de configuración específicos de IDE
+.idea/
+.vscode/
+# Archivos de configuración de Node.js
+node_modules/
+# Archivos de logs
+*.log
+# Archivos de configuración de Tailwind
+tailwind.config.js
+# Archivos de PDF, si no son necesarios en el repositorio
+bdCevichazo.pdf

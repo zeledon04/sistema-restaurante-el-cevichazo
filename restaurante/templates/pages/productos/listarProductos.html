@@ -1,0 +1,145 @@
+{% extends "../../base.html" %}
+{% load static %}
+{% comment %} {% load static %} {% endcomment %}
+{% block title %}Listar Productos{% endblock %}
+{% block content %}
+<div class="container mx-auto p-4 max-w-full rounded-md shadow-md">
+
+    <div class='flex justify-between items-center mb-5'>
+
+        {% comment %} <h1 class='text-3xl text-gray-600 font-bold'>Productos</h1> {% endcomment %}
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Control de Productos</h1>
+            <p class="text-gray-600">Productos Disponibles</p>
+        </div>
+
+        {% comment %} <input 
+            type="text"
+            id="filtroNombre"
+            placeholder='Nombre'
+            class='p-2 bg-gray-300 outline-none rounded-lg w-[18%]'
+            oninput="filtrarProductos()"
+        /> {% endcomment %}
+
+        <input 
+            id="searchTerm"
+            onkeyup="doSearch()"
+            placeholder='Search by name...'
+            value=""
+            class='p-2 bg-gray-300 outline-none rounded-lg w-[18%]'
+            onChange=""
+        />
+
+
+        <a href="{% url 'listar_productos_inactivos' %}" 
+            class="bg-gradient-to-l from-yellow-600 via-yellow-500 to-yellow-300 hover:from-yellow-700 hover:via-yellow-600 hover:to-yellow-400 
+                rounded-lg w-[18%] h-10 p-2 text-gray-100 font-semibold flex items-center justify-center  gap-4
+                transition-all duration-300 cursor-pointer">
+
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-ellipsis overflow-hidden whitespace-nowrap">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+            </svg>
+
+            Ver Inactivos
+        </a>
+
+        <select id="filtroCategoria" class="p-2 bg-gray-300 outline-none rounded-lg w-[18%] text-gray-700" onchange="filtrarProductos()">
+            <option value="">Filtrar por categoría</option>
+            {% for categoria in categorias %}
+            <option value="{{ categoria.categoriaid }}">{{ categoria.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <a href="{% url "agregar_producto" %}" class="inline-flex items-center px-4 py-2 relative bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold bg-amber-500 rounded-md shadow-md cursor-pointer transition-all duration-200 hover:shadow-lg active:scale-95">
+            <svg class="size-6 w-6 h-6 mr-2 whitespace-nowrap" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /> 
+            </svg>
+            Agregar Producto
+        </a>
+      </div>
+
+      <hr class=' border-gray-500/30' />
+
+      <div class="rounded-tr-lg rounded-tl-lg overflow-y-auto flex-1 min-h-0">
+        <table id="datos" class="w-full table-fixed border-collapse mb-5 rounded-lg">
+            <thead class="sticky top-0 bg-gray-100 z-10 p-3 border border-t-0 border-l-0 border-r-0 border-b-gray-200">
+                <tr class="">
+                    <th class="p-2 text-xl">#</th>
+                    <th class="p-2 text-xl">Producto</th>
+                    <th class="p-2 text-xl">Imagen</th>
+                    <th class="p-2 text-xl">Categoria</th>
+                    <th class="p-2 text-xl">Stock</th>
+                    <th class="p-2 text-xl">Precio</th>
+                    <th class="p-2 text-xl">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="p-2 rounded-lg w-full">
+                {% for producto in productos %}
+                <tr class="hover:bg-gray-200 rounded-lg transition-colors">
+                    <td class="p-3 text-xl text-center">{{ producto.cont }}</td>
+                    <td class="p-3 text-xl text-center">{{ producto.nombre }}</td>
+                    <td class="text-center"><img src="{% static 'productos/' %}{{ producto.rutafoto }}?v={{ producto.updated_at.timestamp }}" class="mx-auto block w-16 h-16"></td>
+                    <td class="p-3 text-xl text-center">{{ producto.categoriaid.nombre }}</td>
+                    <td class="p-3 text-xl text-center">{{ producto.stock }}</td>
+                    <td class="p-3 text-xl text-center">C$ {{ producto.precio|floatformat:2 }}</td>
+                    <td class="p-3 text-xl text-center">
+                        <div class="grid grid-cols-2 gap-2 w-full">
+                            <!-- botones aquí -->
+                            <a href="#" onclick="window.location.href='actualizarProducto/{{ producto.productoid }}'" class="btn">
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-11 rounded-lg text-amber-300 hover:bg-gray-300 p-2  w-full">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                </svg>
+                            </a>   
+                            <a href="#" onclick="eliminarProducto({{producto.productoid}})" class="btn">
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-11 rounded-lg text-red-500 hover:bg-gray-300 p-2 w-full">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                            </svg> 
+
+                            </a>
+                            
+                            <a href="#" onclick="window.location.href='listarLotes/{{ producto.productoid }}'" class="btn">
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-11 rounded-lg text-blue-500 hover:bg-gray-300 p-2 w-full">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                </svg>
+                            </a>
+
+                            <a href="#" onclick="window.location.href='agregarLote/{{ producto.productoid }}'" class="btn">
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-11 rounded-lg text-green-500 hover:bg-gray-300 p-2 w-full">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                </svg>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}           
+            </tbody>
+        </table>
+      </div>
+
+      <hr class=' border-gray-500/30'/>
+
+      <div class="flex justify-center items-center mt-5">
+        {% if productos.has_previous %}
+            <a href="?page=1" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">&laquo; Primero</a>
+            <a href="?page={{ productos.previous_page_number }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Anterior</a>
+        {% endif %}
+
+        <span class="px-3 py-1 bg-gray-100 rounded text-gray-700">Página {{ productos.number }} de {{ productos.paginator.num_pages }}</span>
+
+        {% if productos.has_next %}
+            <a href="?page={{ productos.next_page_number }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Siguiente</a>
+            <a href="?page={{ productos.paginator.num_pages }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Último &raquo;</a>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock content %}
+
+{% block scripts %}
+
+<script src="{% static "js/eliminar.js" %}"></script>
+<script src="{% static "js/listarProductos.js" %}"></script>
+<script src="{% static "js/search.js" %}"></script>
+
+{% endblock %}

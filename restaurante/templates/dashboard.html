@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %} 
+<div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-10">
+        {% include "components/cardTicket_A_Caja.html" %}
+        {% include "components/cardTicket_C_Caja.html" %}
+        {% include "components/cardTicket_Efectivo_Caja.html" %}
+        {% include "components/cardTicket_Product.html" %}
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg-grid-cols-2 xl:grid-cols-2 gap-4 mb-10">
+        <!-- Ventas -->
+        <div class="containBarChart bg-white shadow-2xl p-4 rounded-xl border border-gray-300">
+
+            <div class="headerBarChart mb-5 flex flex-col md:flex-row justify-between items-start ">
+                
+                <div class="">
+                    <h1 class="text-2xl font-bold mb-1 text-gray-800 font-sans">Ventas</h1>
+                    <h4 class="tipo" id="tipo"></h4>
+                </div>
+                
+                    <div class="w-[100%] md:w-[40%] rounded-lg bg-gray-300 outline-none text-gray-700">
+                        <select id="modoSelect" name="modoSelect" onchange="" class="w-full h-full p-2 rounded-lg">
+                            <option value="semana">Semana actual</option>
+                            <option value="mes">Últimos 6 meses</option>
+                            <option value="rango">Rango personalizado</option>
+                        </select>
+                    </div>
+
+            </div>
+
+            <div class="lineChart">
+                <canvas id="miGrafico" class=""></canvas>
+            </div>
+
+        </div>
+
+        <!-- TOP 10 Productos más vendidos -->
+        <div class="containBarChart bg-white shadow-2xl p-8 rounded-xl border border-gray-300">
+
+            <div class="headerBarChart mb-5">
+                <h1 class="text-2xl font-bold mb-1 text-gray-800 font-sans">Productos</h1>
+                <h4>Top 10 más vendidos</h4>
+            </div>
+
+            <div class="barChartProductos">
+                <canvas id="barChartProductos" class=""></canvas>
+            </div>
+
+        </div>
+    
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{% static 'js/charts/ventas.js' %}"></script>
+<script src="{% static 'js/charts/productos.js' %}"></script>
+{% comment %} 
+<script src="{% static 'js/caja.js' %}"></script>
+{% endcomment %}
+{% endblock %}
