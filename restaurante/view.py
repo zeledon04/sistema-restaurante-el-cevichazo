@@ -52,7 +52,7 @@ def dashboard(request):
             
         }
         return render(request, 'dashboard.html', datos)
-    return render(request, 'dashboard.html')
+    return render(request, 'dashboard.html', user_data)
 
 
 def login(request):
@@ -81,5 +81,3 @@ def login(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
-
-

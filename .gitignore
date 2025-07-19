@@ -3,7 +3,6 @@
 # Ignorar el entorno virtual
 venv/
 # Archivos de base de datos
-*.db
 *.sqlite3
 # Archivos de compilación de Python
 *.py[cod]

@@ -17,6 +17,8 @@ from datetime import  datetime
 from django.http import JsonResponse
 from django.utils.timezone import now
 
+from ..view import datosUser
+
 @login_required
 def verificar_caja(request):
     caja_abierta = Cajas.objects.filter(usuarioid=request.session['user_id'], estado=1).first()
@@ -74,7 +76,8 @@ def abrir_caja(request):
 
 @admin_required
 def listarCajas(request):
-    return render(request, 'pages/cajas/listarCajas.html')
+    user_data = datosUser(request)
+    return render(request, 'pages/cajas/listarCajas.html', user_data)
 
 """
 @login_required

@@ -3,13 +3,13 @@ from django.contrib.auth import logout, authenticate
 from ..models import Opciones
 from django.contrib import messages
 from django.shortcuts import render, redirect
+from ..view import datosUser
 
 @admin_required
 def opciones(request):
-    # user_data = datosUser(request)
+    user_data = datosUser(request)
     opc = Opciones.objects.first()
-    # datos = {**user_data, 'opcion': opc}
-    datos = { 'opcion': opc }
+    datos = {**user_data, 'opcion': opc}
     if request.method == 'POST':
         tasa = request.POST.get('tasa')
         direccion = request.POST.get('direccion')

@@ -8,6 +8,7 @@ from restaurante.models import Categoriasproducto, Productos
 import os
 from datetime import datetime, timedelta
 from ..utils import login_required, admin_required
+from ..view import datosUser    
 
 # Create your views here.
 @login_required
@@ -15,7 +16,7 @@ def listarProductos(request):
     categorias = Categoriasproducto.objects.filter(estado=1)
     productos_set = Productos.objects.filter(estado=1).select_related('categoriaid').order_by('-productoid')
     
-    paginator = Paginator(productos_set, 50)
+    paginator = Paginator(productos_set, 1)
     
     page_number = request.GET.get('page')
     page_obj=paginator.get_page(page_number)
@@ -25,7 +26,9 @@ def listarProductos(request):
         producto.cont = cont 
         cont += 1
     
+    user_data = datosUser(request)
     return render(request, 'pages/productos/listarProductos.html', {
+        **user_data,
         'productos': page_obj,
         'categorias':categorias
     })
@@ -45,7 +48,9 @@ def listarProductosInactivos(request):
         producto.cont = cont 
         cont += 1
     
+    user_data = datosUser(request)
     return render(request, 'pages/productos/listarProductosInactivos.html', {
+        **user_data,
         'productos': page_obj,
         'categorias':categorias
     })
@@ -53,7 +58,8 @@ def listarProductosInactivos(request):
 @admin_required
 def agregarProducto(request):
     categorias = Categoriasproducto.objects.filter(estado = 1)
-    datos = {'categorias':categorias}
+    user_data = datosUser(request)
+    datos = {**user_data, 'categorias': categorias}   
     
     try:
         if request.method == 'POST':
@@ -104,8 +110,8 @@ def agregarProducto(request):
 def  actualizarProducto(request, id):
     categorias = Categoriasproducto.objects.filter(estado=1)
     producto = Productos.objects.get(pk=id)
-    
-    datos = { 'producto':producto, 'categorias': categorias}
+    user_data = datosUser(request)
+    datos = {**user_data, 'producto': producto, 'categorias': categorias}
     
     try:
     

@@ -5,20 +5,20 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from ..utils import admin_required, login_required
 
+from ..view import datosUser
+
 @login_required
 def listarCategorias(request):
-    # user_data = datosUser(request)
+    user_data = datosUser(request)
     categorias = Categoriasproducto.objects.filter(estado=1)
     
-    # return render(request, 'pages/categorias/listarCategorias.html', {**user_data, 'categorias': categorias})
-    return render(request, 'pages/categorias/listarCategorias.html', {'categorias': categorias})
+    return render(request, 'pages/categorias/listarCategorias.html', {**user_data, 'categorias': categorias})
 
 @admin_required
 def listarCategoriasInactivas(request):
     categorias = Categoriasproducto.objects.filter(estado=0)  
-    # user_data = datosUser(request)
-    # return render(request, 'pages/categorias/listarCategoriasInactivas.html', {**user_data, 'categorias': categorias})
-    return render(request, 'pages/categorias/listarCategoriasInactivas.html', {'categorias': categorias})
+    user_data = datosUser(request)
+    return render(request, 'pages/categorias/listarCategoriasInactivas.html', {**user_data, 'categorias': categorias})
 
 @admin_required
 def agregarCategoria(request):
@@ -33,17 +33,15 @@ def agregarCategoria(request):
         categoria.save()
         messages.success(request, "Categoría agregada correctamente!")
         return redirect('listar_categorias')
-    # user_data = datosUser(request)
+    user_data = datosUser(request)
     
-    # return render(request, 'pages/categorias/agregarCategoria.html', user_data)
-    return render(request, 'pages/categorias/agregarCategoria.html')
+    return render(request, 'pages/categorias/agregarCategoria.html', user_data)
 
 @admin_required
 def actualizarCategoria(request, id):
     categoria = Categoriasproducto.objects.get(pk=id)
-    # user_data = datosUser(request)
-    # datos = {**user_data, 'categoria' : categoria}
-    datos = {'categoria' : categoria}
+    user_data = datosUser(request)
+    datos = {**user_data, 'categoria' : categoria}
     
     if request.method == 'POST':
         nombre = request.POST.get('nombre')

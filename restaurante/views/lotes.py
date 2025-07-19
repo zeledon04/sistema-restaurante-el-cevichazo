@@ -7,6 +7,8 @@ from ..utils import admin_required
 
 from django.db.models import Case, When, Value, IntegerField
 
+from ..view import datosUser
+
 @admin_required
 def listarLotes(request, id):
     producto = Productos.objects.get(pk=id)
@@ -25,17 +27,15 @@ def listarLotes(request, id):
         )
         .order_by('prioridad', 'loteid')
     )
-    # user_data = datosUser(request)
-    # datos = {**user_data, 'lotes': lotes, 'producto': producto}
-    datos = {'lotes': lotes, 'producto': producto}
+    user_data = datosUser(request)
+    datos = {**user_data, 'lotes': lotes, 'producto': producto}
     return render(request, 'pages/productos/lotes/listarLotes.html', datos)
 
 @admin_required
 def agregarLote(request, id):
     producto = Productos.objects.get(pk=id)
-    # user_data = datosUser(request)
-    # datos = {**user_data, 'producto' : producto}
-    datos = {'producto' : producto}
+    user_data = datosUser(request)
+    datos = {**user_data, 'producto' : producto}
     
     if request.method == 'POST':
         fechavencimiento = request.POST.get('fechavencimiento')

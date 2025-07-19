@@ -6,9 +6,11 @@ from django.db import transaction
 from django.utils import timezone
 
 from restaurante.models import Cuentastemporales, Mesas, Usuarios
+from ..view import datosUser
 
 # Create your views here.
 def listarMesas(request):
+    user_data = datosUser(request)
     # Obtener todas las mesas ocupadas (estado=1)
     mesas_ocupadas = Mesas.objects.filter(estado=1)
     # Obtener cuentas temporales activas (estado=1) relacionadas a esas mesas
@@ -31,6 +33,7 @@ def listarMesas(request):
         cont += 1
 
     return render(request, 'pages/mesas/listarMesas.html', {
+        **user_data,
         'mesas': mesas,
         'numMesas': cont
     })

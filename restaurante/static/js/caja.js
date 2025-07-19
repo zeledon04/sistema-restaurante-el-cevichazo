@@ -5,7 +5,6 @@ document.getElementById("btn-abrir-caja").addEventListener("click", function () 
         .then(data => {
             if (data.estado === 'abierta') {
                 Swal.fire("Caja ya abierta", `Hora de apertura: ${data.hora_apertura}`, "warning");
-                document.getElementById("hora-apertura").textContent = data.hora_apertura;
             } else {
                 Swal.fire({
                     title: "Abrir Caja",

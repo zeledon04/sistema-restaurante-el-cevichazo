@@ -6,28 +6,30 @@ from django.utils import timezone
 from restaurante.models import Categoriasproducto, Platos
 import os
 from datetime import datetime, timedelta
+from ..view import datosUser
 
 def listarPlatos(request):
     categorias = Categoriasproducto.objects.filter(estado=1)
     platos = Platos.objects.filter(estado=1).select_related('categoriaid').order_by('-platoid')
-
-    datos = {'categorias':categorias, 'platos': platos}
-    
+    user_data = datosUser(request)
+    datos = {**user_data, 'categorias': categorias, 'platos': platos}
+        
     return render(request, 'pages/platos/listarPlatos.html', datos)
 
 
 def listarPlatosInactivos(request):
     categorias = Categoriasproducto.objects.filter(estado=1)
     platos = Platos.objects.filter(estado=0).select_related('categoriaid').order_by('-platoid')
-    
-    datos = {'categorias':categorias, 'platos': platos}
+    user_data = datosUser(request)
+    datos = {**user_data, 'categorias': categorias, 'platos': platos}
     
     return render(request, 'pages/platos/listarPlatosInactivos.html', datos)
 
 
 def agregarPlato(request):
     categorias = Categoriasproducto.objects.filter(estado = 1)
-    datos = {'categorias':categorias}
+    user_data = datosUser(request)
+    datos = {**user_data, 'categorias': categorias}
     
     try:
         if request.method == 'POST':
@@ -78,8 +80,8 @@ def agregarPlato(request):
 def  actualizarPlato(request, id):
     categorias = Categoriasproducto.objects.filter(estado=1)
     plato = Platos.objects.get(pk=id)
-    
-    datos = { 'plato':plato, 'categorias': categorias}
+    user_data = datosUser(request)
+    datos = {**user_data, 'plato': plato, 'categorias': categorias}
     
     try:
     
