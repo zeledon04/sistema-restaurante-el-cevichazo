@@ -100,7 +100,7 @@ def  actualizarPlato(request, id):
             
             if 'rutafoto' in request.FILES:
                 file = request.FILES['rutafoto']
-                filename = nombre.replace(" ", "") + ".jpg"
+                filename = nombre.replace(" ", "") + "_" + str(id) + ".jpg"
                 full_path = os.path.join(settings.BASE_DIR, 'restaurante/static/productos', filename)
                 
                 #Guardar la nueva imagen
