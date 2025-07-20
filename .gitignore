@@ -22,3 +22,5 @@ node_modules/
 tailwind.config.js
 # Archivos de PDF, si no son necesarios en el repositorio
 bdCevichazo.pdf
+
+dist/styles.css
