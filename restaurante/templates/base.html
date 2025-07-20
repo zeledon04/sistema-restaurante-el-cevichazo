@@ -15,17 +15,15 @@
     <link rel="stylesheet" href="{% static 'sweetalert/sweetalert2.min.css' %}" />
     <link rel="stylesheet" href="{% static 'sweetalert/sweetalert2.css' %}" />
     <link rel="stylesheet" href="{% static 'dist/styles.css' %}" />
-    
   </head>
 
- 
   <body class="text-gray-300">
     <div class="bg-gray-900 dark:bg-gray-500">
       <div class="min-h-screen grid grid-cols-1 xl:grid-cols-6">
         {% include 'components/sidebar.html' %}
         <div class="xl:col-span-5 bg-gray-100">
           {% include 'components/header.html' %}
-          <div class="h-[90vh] overflow-y-auto px-4 pb-4 text-gray-700 pt-4">
+          <div class="xl:h-[90vh] overflow-y-auto pt-4 px-4 text-gray-700">
             {% block content %}
 
             {% endblock %}
@@ -58,13 +56,13 @@
     .rotate {
       transform: rotate(90deg);
     }
-  </style> 
+  </style>
 </html>
 
 {% comment %} <div class="xl:col-span-3 space-y-4 p-4 md:p-6 max-h-[95vh] lg:p-2 rounded-xl shadow-2xl border border-gray-300">
   <div></div>
-  
-  <div id="productos-container" class=" bg-red-300 overflow-auto max-h-[95vh] grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-2 p-2 rounded-lg">
+
+  <div id="productos-container" class="bg-red-300 overflow-auto max-h-[95vh] grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-2 p-2 rounded-lg">
     <div class="flex flex-col justify-between rounded-lg shadow-sm"></div>
     <div class="flex flex-col justify-between rounded-lg shadow-sm"></div>
     <div class="flex flex-col justify-between rounded-lg shadow-sm"></div>

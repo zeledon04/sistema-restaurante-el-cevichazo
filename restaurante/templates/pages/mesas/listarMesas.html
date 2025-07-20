@@ -26,7 +26,7 @@
     {% comment %} Table Cards {% endcomment %}
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4">
 
-        <div onclick="window.location.href='{% url "agregar_delivery" %}'" class="flex flex-col justify-center items-center space-y-2 p-4 bg-gray-50 rounded-lg shadow-md cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105">
+        <div id="btn-nueva-factura" class="flex flex-col justify-center items-center space-y-2 p-4 bg-gray-50 rounded-lg shadow-md cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105">
           <div class="text-xl font-bold text-gray-900">Facturar</div>
 
           <div class='w-15 h-15 rounded-full flex items-center justify-center'>
@@ -39,66 +39,41 @@
             Nueva Factura
           </div>
 
-          {% comment %} <div class="text-xs text-gray-500 text-center">
-            <div><span class="font-semibold">Cliente: </span> {{ info.cliente }}</div>
-            <div><span class="font-semibold">Mesero: </span> {{ info.mesero }}</div>
-            <div class="flex items-center justify-center space-x-1 mt-1">
-              <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 w-3 h-3">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-              </svg>
-              
-              <span class="tiempo-activo" data-hora="{{ info.hora|date:'c' }}"></span>
-
-            </div>
-          </div> {% endcomment %}
-
         </div>
       {% for info in mesas %}
-        <div onclick="window.location.href='{% url "agregar_cuentas" info.mesa_id %}'" class="flex flex-col items-center space-y-2 p-4 bg-gray-50 rounded-lg shadow-md cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105">
+        <div onclick="window.location.href='{% url "agregar_cuentas" info.mesa_id %}'" class="relative flex flex-col items-center space-y-2 p-4 px-4 pb-4 bg-gray-50 rounded-lg shadow-md cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105">
+  
+        <!-- Botón X en la esquina superior derecha -->
+        <button onclick="event.stopPropagation(); console.log('click hijo')" class="cursor-pointer absolute top-2 right-2 bg-red-500 hover:bg-red-700 hover:scale-120 transition-all duration-200 rounded-full p-1 text-white">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
 
-          <div class="text-xl font-bold text-gray-900">Mesa {{ info.numero }}</div>
+        <div class="text-xl font-bold text-gray-900">Mesa {{ info.numero }}</div>
 
-          <div class='w-15 h-15 rounded-full flex items-center justify-center'>
-            <div class="flex items-start rounded-full bg-green-500/80 p-2">
-              <img alt="Comedor" src="{% static 'icon/diningTable.svg' %}" class="">
-            </div>
+        <div class='w-15 h-15 rounded-full flex items-center justify-center'>
+          <div class="flex items-start rounded-full bg-green-500/80 p-2">
+            <img alt="Comedor" src="{% static 'icon/diningTable.svg' %}" class="">
           </div>
-
-          <div variant="secondary" class='text-green-700 bg-gray-50'>
-            Ocupada
-          </div>
-
-          <div class="text-xs text-gray-500 text-center">
-            <div><span class="font-semibold">Cliente: </span> {{ info.cliente }}</div>
-            <div><span class="font-semibold">Mesero: </span> {{ info.mesero }}</div>
-            
-            <div class="flex items-center justify-evenly space-x-1 mt-1 w-65">
-              
-              <div class="flex items-center justify-around w-[78%]">
-
-                <button onclick="window.location.href=''" class="flex items-center p-1.5 font-semibold justify-around rounded-lg ml-16 w-[52%] text-white bg-red-500 cursor-pointer hover:scale-105 transition-all">
-                  <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                  </svg>
-
-                  <span class="" >Cerrar Mesa</span>
-                </button>
-
-              </div>
-
-              <div class="flex items-center justify-around w-[22%] mt-5 pr-1">
-                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 w-3 h-3">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
-                
-                <span class="tiempo-activo" data-hora="{{ info.hora|date:'c' }}"></span>
-              </div>
-
-            </div>
-
-          </div>
-
         </div>
+  
+        <div variant="secondary" class='text-green-700 bg-gray-50'>
+          Ocupada
+        </div>
+
+        <div class="text-xs text-gray-500 text-center">
+          <div><span class="font-semibold">Cliente: </span> {{ info.cliente }}</div>
+          <div><span class="font-semibold">Mesero: </span> {{ info.mesero }}</div>
+          <div class="flex items-center justify-center space-x-1 mt-1">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <span class="tiempo-activo" data-hora="{{ info.hora|date:'c' }}"></span>
+          </div>
+        </div>
+
+      </div>
       {% endfor %}
     </div>
 
