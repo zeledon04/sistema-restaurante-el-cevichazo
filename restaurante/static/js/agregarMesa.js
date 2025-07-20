@@ -1,65 +1,104 @@
 
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("btn-agregar-mesa").addEventListener("click", () => {
-        fetch('/api/meseros/')
+
+        // Primero verificar si hay caja abierta
+        fetch('/verificar_caja/')
             .then(res => res.json())
-            .then(meseros => {
-                Swal.fire({
-                    title: 'Agregar Mesa',
-                    html: `
-                        <div id="agregarMesa-container">
-                            ${agregarMesaFormHTML(meseros)}
-                        </div>
-                        <div class="flex items-center justify-center">
-                            <button id="confirmAgregarMesa" class="bg-amber-500 hover:bg-amber-600 text-white font-semibold p-2 w-[40%] flex items-center justify-center rounded gap-2" style="margin: 8px 0;">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 w-6 h-6 mr-2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                </svg>
-                                Agregar Mesa
-                            </button>
-                        </div>
-                    `,
-                    showConfirmButton: false
-                });
-
-                // Delegación para botón dentro de Swal
-                document.getElementById("confirmAgregarMesa").addEventListener("click", () => {
-                    const numero = document.getElementById("numeroMesa").value;
-                    const mesero = document.getElementById("nombreMesero").value;
-                    const cliente = document.getElementById("nombreCliente").value;
-
-                    if (!numero || !cliente) {
-                        Swal.fire("Campos requeridos", "Completa todos los campos obligatorios", "warning");
-                        return;
-                    }
-
-                    fetch('/mesas/agregar/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': getCookie('csrftoken')
-                        },
-                        body: JSON.stringify({
-                            numero,
-                            mesero,
-                            cliente
-                        })
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.message) {
-                            Swal.fire('Éxito', data.message, 'success');
-                        } else {
-                            Swal.fire('Error', data.error || 'No se pudo agregar la mesa', 'error');
-                        }
-                    })
-                    .catch(() => {
-                        Swal.fire('Error', 'Error de red o servidor', 'error');
+            .then(data => {
+                if (data.estado === 'cerrada') {
+                    Swal.fire({
+                        title: 'Caja cerrada',
+                        text: 'No se puede agregar una mesa porque la caja está cerrada.',
+                        icon: 'warning',
+                        confirmButtonText: 'Aceptar'
                     });
-                });
+                    return; // detener ejecución
+                }
+
+                // Si hay caja abierta, continuar
+                fetch('/api/meseros/')
+                    .then(res => res.json())
+                    .then(meseros => {
+                        Swal.fire({
+                            title: 'Agregar Mesa',
+                            html: `
+                                <div id="agregarMesa-container">
+                                    ${agregarMesaFormHTML(meseros)}
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <button id="confirmAgregarMesa" class="bg-amber-500 hover:bg-amber-600 text-white font-semibold p-2 w-[40%] flex items-center justify-center rounded gap-2" style="margin: 8px 0;">
+                                        <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 w-6 h-6 mr-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                        </svg>
+                                        Agregar Mesa
+                                    </button>
+                                </div>
+                            `,
+                            showConfirmButton: false
+                        });
+
+                        // Delegación para botón dentro de Swal
+                        document.getElementById("confirmAgregarMesa").addEventListener("click", () => {
+                            const numero = document.getElementById("numeroMesa").value;
+                            const mesero = document.getElementById("nombreMesero").value;
+                            const cliente = document.getElementById("nombreCliente").value;
+
+                            if (!numero || !cliente) {
+                                Swal.fire("Campos requeridos", "Completa todos los campos obligatorios", "warning");
+                                return;
+                            }
+
+                            fetch('/mesas/agregar/', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': getCookie('csrftoken')
+                                },
+                                body: JSON.stringify({
+                                    numero,
+                                    mesero,
+                                    cliente
+                                })
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.message) {
+                                    Swal.fire('Éxito', data.message, 'success');
+                                    window.location.reload(); // Recargar la página para ver la nueva mesa
+                                } else {
+                                    Swal.fire('Error', data.error || 'No se pudo agregar la mesa', 'error');
+                                }
+                            })
+                            .catch(() => {
+                                Swal.fire('Error', 'Error de red o servidor', 'error');
+                            });
+                        });
+                    });
             });
     });
 });
+
+
+document.getElementById("btn-nueva-factura").addEventListener("click", () => {
+    fetch('/verificar_caja/')
+        .then(res => res.json())
+        .then(data => {
+            if (data.estado === 'cerrada') {
+                Swal.fire({
+                    title: 'Caja cerrada',
+                    text: 'No se puede iniciar una nueva factura porque la caja está cerrada.',
+                    icon: 'warning',
+                    confirmButtonText: 'Aceptar'
+                });
+                return; // detener ejecución
+            }
+
+            // Si hay caja abierta, redirigir a la página de facturación
+            window.location.href = '/mesas/agregarDelivery/';
+        });
+});
+
 
 // Formulario en HTML con meseros
 function agregarMesaFormHTML(meseros = []) {

@@ -7,6 +7,7 @@ from restaurante.models import Categoriasproducto, Platos
 import os
 from datetime import datetime, timedelta
 from ..view import datosUser
+from django.db import transaction
 
 def listarPlatos(request):
     categorias = Categoriasproducto.objects.filter(estado=1)
@@ -25,7 +26,7 @@ def listarPlatosInactivos(request):
     
     return render(request, 'pages/platos/listarPlatosInactivos.html', datos)
 
-
+@transaction.atomic
 def agregarPlato(request):
     categorias = Categoriasproducto.objects.filter(estado = 1)
     user_data = datosUser(request)
@@ -39,9 +40,21 @@ def agregarPlato(request):
             precio = request.POST.get('precio')
             ruta = 'defaultImage.png'
 
+            plato = Platos(
+                nombre = nombre,
+                descripcion  = descripcion,
+                categoriaid_id = categoriaid,
+                precio = precio,
+                estado = 1,
+                rutafoto = ruta,
+                updated_at = timezone.now()
+            )
+            plato.save()
+            
         if 'rutafoto' in request.FILES:
             file = request.FILES['rutafoto']
-            filename = nombre.replace(" ", "") + '.jpg'
+            limpio = nombre.replace(" ", "")
+            filename = f"{limpio}_{plato.platoid}.jpg"
             full_path = os.path.join(settings.BASE_DIR, 'restaurante/static/productos/', filename)
             
             # Ruta de almacenamiento segura para usuarios finales
@@ -59,16 +72,10 @@ def agregarPlato(request):
             # ruta = rel_path.replace('\\', '/')
             ruta = filename
             
-            platos = Platos(
-                nombre = nombre,
-                descripcion  = descripcion,
-                categoriaid_id = categoriaid,
-                precio = precio,
-                estado = 1,
-                rutafoto = ruta,
-                updated_at = timezone.now()
-            )
-            platos.save()
+            plato.rutafoto = ruta
+            plato.save()
+            
+            
             messages.success(request, 'Platillo agregado correctamente!')
             return redirect('listar_platos')
     except Exception as e:

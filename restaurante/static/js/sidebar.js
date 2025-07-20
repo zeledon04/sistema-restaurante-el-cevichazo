@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (activeHref) {
     links.forEach(link => {
       if (link.getAttribute("href") === activeHref) {
-        link.classList.add("text-[#E74C3C]", "font-bold", "before:bg-red-500");
+        link.classList.add("font-bold", "before:bg-red-500");
         const subMenu = link.closest(".subMenu");
         if (subMenu) {
           subMenu.classList.remove("hidden");
