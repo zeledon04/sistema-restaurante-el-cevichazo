@@ -77,9 +77,6 @@ def agregarMesa(request):
 def  agregarCuentas(request, id):
     return render(request, 'pages/mesas/agregarCuentas.html')
 
-def  agregarDelivery(request):
-    return render(request, 'pages/mesas/agregarDelivery.html')
-
 
 def obtener_meseros(request):
     meseros = Usuarios.objects.filter(rol=2).values('usuarioid', 'nombre')

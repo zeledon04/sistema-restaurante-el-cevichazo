@@ -19,11 +19,11 @@
 
   <body class="text-gray-300">
     <div class="bg-gray-900 dark:bg-gray-500">
-      <div class="min-h-screen grid grid-cols-1 xl:grid-cols-6">
+      <div class="min-h-full grid grid-cols-1 xl:grid-cols-6">
         {% include 'components/sidebar.html' %}
         <div class="xl:col-span-5 bg-gray-100">
           {% include 'components/header.html' %}
-          <div class="xl:h-[90vh] overflow-y-auto pt-4 px-4 text-gray-700">
+          <div class="xl:h-[90vh] overflow-y-auto pt-4 pb-2 px-4 text-gray-700">
             {% block content %}
 
             {% endblock %}
