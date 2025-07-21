@@ -21,8 +21,11 @@ urlpatterns = [
     path('mesas/listar/', mesas.listarMesas, name='listar_mesas'),
     path('mesas/agregar/', mesas.agregarMesa, name='agregar_mesa'),
     path('mesas/agregarCuentas/<int:id>', mesas.agregarCuentas, name='agregar_cuentas'),
-    path('mesas/agregarDelivery/', mesas.agregarDelivery, name='agregar_delivery'),
     path('api/meseros/', mesas.obtener_meseros, name='obtener_meseros'),
+    
+    
+    path('buscar_productos/', facts.buscar_productos, name='buscar_productos'),
+    path('cuentas/facturaUnica/', facts.nuevaFacturaUnica, name='nuevaFacturaUnica'),
 
     
     #urls para platos
