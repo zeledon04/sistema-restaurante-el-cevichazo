@@ -61,10 +61,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 cantidadInput.value = cantidad;
 
                 const precioInput = filaExistente.querySelector('.precio');
-                console.log(precioInput.textContent);
                 const nuevoPrecio = parseFloat(precioInput.value);
                 const nuevoSubtotal = (cantidad * nuevoPrecio).toFixed(2);
-                // console.log(`Nuevo subtotal para ${nombre}: C$ ${nuevoSubtotal}`);
                 filaExistente.querySelector('.subtotal').textContent = `C$ ${nuevoSubtotal}`;
 
                 actualizarTotal();
@@ -193,7 +191,6 @@ function actualizarTotal() {
 }
 
 function buscarProductos(query) {
-    console.log("Buscando productos con query:", query);
     fetch(`/buscar_productos?q=${encodeURIComponent(query)}`, {
         headers: {
             'X-Requested-With': 'XMLHttpRequest'
@@ -295,7 +292,9 @@ function handleTipoPago() {
         nuevoInput.type = 'text';
         nuevoInput.id = 'efectivo-mixto';
         nuevoInput.placeholder = 'Dolares';
-        nuevoInput.className = 'p-2 dark:bg-secondary-900 bg-gray-300 outline-none rounded-lg w-48 mr-1';
+        efectivo.classList.remove('w-45');
+        efectivo.classList.add('w-24');
+        nuevoInput.className = 'p-2 dark:bg-secondary-900 bg-gray-300 outline-none rounded-lg w-24 mr-1';
         container.appendChild(nuevoInput);
     } else if (tipo == '4') {
         efectivo.style.display = 'none';

@@ -79,11 +79,17 @@ class Detallefacturaproducto(models.Model):
 
 class Facturas(models.Model):
     facturaid = models.AutoField(db_column='facturaId', primary_key=True, blank=True)  # Field name made lowercase.
-    mesaid = models.ForeignKey('Mesas', models.DO_NOTHING, db_column='mesaId')  # Field name made lowercase.
+    mesaid = models.ForeignKey('Mesas', models.DO_NOTHING, db_column='mesaId', blank=True, null=True)  # Field name made lowercase.
     usuarioid = models.ForeignKey('Usuarios', models.DO_NOTHING, db_column='usuarioId')  # Field name made lowercase.
-    clientenombre = models.TextField(db_column='clienteNombre', blank=True)  # Field name made lowercase.
+    clientenombre = models.TextField(db_column='clienteNombre', blank=True, null=True)  # Field name made lowercase.
     fecha = models.DateTimeField(blank=True, null=True)
-    total = models.FloatField()
+    estado = models.IntegerField(blank=True, null=True)
+    cordobas = models.FloatField(blank=True, null=True)
+    dolares = models.FloatField(blank=True, null=True)
+    tipo = models.IntegerField(blank=True, null=True)
+    tasacambio = models.TextField(blank=True, null=True)  # This field type is a guess.
+    cajaid = models.IntegerField(db_column='cajaId', blank=True, null=True)  # Field name made lowercase.
+    motivo = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False

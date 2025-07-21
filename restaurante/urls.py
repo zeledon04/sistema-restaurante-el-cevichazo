@@ -25,7 +25,8 @@ urlpatterns = [
     
     
     path('buscar_productos/', facts.buscar_productos, name='buscar_productos'),
-    path('cuentas/facturaUnica/', facts.nuevaFacturaUnica, name='nuevaFacturaUnica'),
+    path('cuentas/facturaUnica/', facts.nueva_Factura_Unica, name='nuevaFacturaUnica'),
+    path('guardar-factura-unica/', facts.guardar_Factura_Unica, name='guardarFacturaUnica'),
 
     
     #urls para platos
@@ -74,5 +75,7 @@ urlpatterns = [
     
     #urls para listar cocinas
     path('cocinas/listar/', cocinas.listarCocinas, name='listar_cocinas'),
+    
+    path('api/tasa-cambio/', view.obtener_tasa_cambio, name='tasa_cambio'),
     
 ]

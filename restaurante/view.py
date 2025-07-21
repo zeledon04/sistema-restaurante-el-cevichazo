@@ -3,7 +3,7 @@ from django.http import JsonResponse
 
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth import logout, authenticate
-from restaurante.models import Cajas, Usuarios
+from restaurante.models import Cajas, Opciones, Usuarios
 from django.contrib import messages
 from .utils import login_required, logout_required, admin_required, vendedor_required
 
@@ -81,3 +81,12 @@ def login(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+
+def obtener_tasa_cambio(request):
+    try:
+        opcion = Opciones.objects.first()
+        tasa = opcion.tasacambio if opcion else None
+        return JsonResponse({'tasaCambio': tasa})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

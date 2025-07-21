@@ -39,7 +39,6 @@
 
     <div class="xl:col-span-4 max-h-[95vh] space-y-4 md:p-2 rounded-xl shadow-2xl border border-gray-300">
 
-        
         <div class="rounded-lg shadow-md border-2 border-gray-200">
         
             <div class="p-2 pb-0 flex flex-col items-center justify-between w-full border-b-1 border-gray-200">
@@ -50,7 +49,7 @@
                         type="text"
                         id="nombre-cliente"
                         placeholder='Inserta cliente...'
-                        class='p-2 bg-gray-300 outline-none rounded-lg w-48 mr-1'
+                        class='p-2 bg-gray-300 outline-none rounded-lg w-40 mr-1'
                     />
 
                     <select class='p-2 bg-gray-300 outline-none rounded-lg mr-1' name="tipo" id="tipo" onchange="handleTipoPago()">
@@ -66,8 +65,10 @@
                         placeholder='Córdobas'
                         class='p-2 bg-gray-300 outline-none rounded-lg w-45 mr-1'
                     />
-                    
-                    <button onclick="guardarFactura()" class="bg-gradient-to-r from-green-800 via-green-700 to-green-500 hover:from-green-900 hover:via-green-800 hover:to-green-600 text-white shadow-lg transition-all duration-300 font-semibold cursor-pointer rounded-lg w-50 p-2 active:scale-95">
+                    <div id="extra-efectivo">
+
+                    </div>
+                    <button onclick="guardarFactura()" class="bg-gradient-to-r from-green-800 via-green-700 to-green-500 hover:from-green-900 hover:via-green-800 hover:to-green-600 text-white shadow-lg transition-all duration-300 font-semibold cursor-pointer rounded-lg w-45 p-2 active:scale-95">
                         Guardar
                     </button>
                 </div>
@@ -111,5 +112,6 @@
 {% block scripts %}
 
 <script src="{% static 'js/delivery.js' %}"></script>
+<script src="{% static 'js/guardarFacturaUnica.js' %}"></script>
 
 {% endblock %}
