@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from . import view
-from .views import cajas, mesas, platos, productos, categorias, lotes, opciones
+from .views import cajas, mesas, platos, productos, categorias, lotes, opciones, cocinas
 from .views.charts import ventas, productosVend
 
 urlpatterns = [
@@ -69,6 +69,7 @@ urlpatterns = [
     path('api/productos_mas_vendidos/', productosVend.productos_mas_vendidos, name='productos_mas_vendidos'), 
     
     
-    
+    #urls para listar cocinas
+    path('cocinas/listar/', cocinas.listarCocinas, name='listar_cocinas'),
     
 ]
