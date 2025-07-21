@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from . import view
-from .views import cajas, mesas, platos, productos, categorias, lotes, opciones, cocinas
+from .views import cajas, facts, mesas, platos, productos, categorias, lotes, opciones, cocinas
 from .views.charts import ventas, productosVend
 
 urlpatterns = [
