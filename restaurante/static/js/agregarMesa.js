@@ -95,7 +95,7 @@ document.getElementById("btn-nueva-factura").addEventListener("click", () => {
             }
 
             // Si hay caja abierta, redirigir a la página de facturación
-            window.location.href = '/mesas/agregarDelivery/';
+            window.location.href = '/cuentas/facturaUnica/';
         });
 });
 
