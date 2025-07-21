@@ -217,6 +217,7 @@ class Opciones(models.Model):
     direccion = models.TextField(blank=True, null=True)
     telefono = models.TextField(blank=True, null=True)
     mensaje = models.TextField(blank=True, null=True)
+    numeroruc = models.TextField(db_column='numeroRUC', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
