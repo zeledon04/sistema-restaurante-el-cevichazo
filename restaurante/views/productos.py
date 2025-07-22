@@ -16,7 +16,7 @@ def listarProductos(request):
     categorias = Categoriasproducto.objects.filter(estado=1)
     productos_set = Productos.objects.filter(estado=1).select_related('categoriaid').order_by('-productoid')
     
-    paginator = Paginator(productos_set, 1)
+    paginator = Paginator(productos_set, 50)
     
     page_number = request.GET.get('page')
     page_obj=paginator.get_page(page_number)

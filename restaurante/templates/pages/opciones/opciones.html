@@ -15,7 +15,7 @@
           </div>
           <div class='flex-1 flex items-center gap-4'>
             <div class='w-full'>
-              <input type="number" step="any" value="{{opcion.tasacambio}}" name="tasa" required class='w-full py-2 px-4 outline-none rounded-lg dark:bg-secondary-900 bg-gray-300' placeholder='Nombre' />
+              <input type="number" step="any" value="{{opcion.tasacambio}}" name="tasa" required class='w-full py-2 px-4 outline-none rounded-lg dark:bg-secondary-900 bg-gray-300' placeholder='Tasa de Cambio' />
             </div>
           </div>
         </div>
@@ -26,7 +26,7 @@
           </div>
           <div class='flex-1 flex items-center gap-4'>
             <div class='w-full'>
-              <input type="text" step="any" value="{{opcion.direccion}}" name="direccion" required class='w-full py-2 px-4 outline-none rounded-lg dark:bg-secondary-900 bg-gray-300' placeholder='Nombre' />
+              <input type="text" step="any" value="{{opcion.direccion}}" name="direccion" required class='w-full py-2 px-4 outline-none rounded-lg dark:bg-secondary-900 bg-gray-300' placeholder='Dirección' />
             </div>
           </div>
         </div>
@@ -37,7 +37,7 @@
           </div>
           <div class='flex-1 flex items-center gap-4'>
             <div class='w-full'>
-              <input type="text" step="any" value="{{opcion.telefono}}" name="telefono" required class='w-full py-2 px-4 outline-none rounded-lg dark:bg-secondary-900 bg-gray-300' placeholder='Nombre' />
+              <input type="text" step="any" value="{{opcion.telefono}}" name="telefono" required class='w-full py-2 px-4 outline-none rounded-lg dark:bg-secondary-900 bg-gray-300' placeholder='Teléfono' />
             </div>
           </div>
         </div>
@@ -48,7 +48,18 @@
           </div>
           <div class='flex-1 flex items-center gap-4'>
             <div class='w-full'>
-              <input type="text" step="any" value="{{opcion.mensaje}}" name="mensaje" required class='w-full py-2 px-4 outline-none rounded-lg dark:bg-secondary-900 bg-gray-300' placeholder='Nombre' />
+              <input type="text" step="any" value="{{opcion.mensaje}}" name="mensaje" required class='w-full py-2 px-4 outline-none rounded-lg dark:bg-secondary-900 bg-gray-300' placeholder='Mensaje' />
+            </div>
+          </div>
+        </div>
+
+        <div class='flex items-center mb-8'>
+          <div class='w-1/4'>
+            <p>Número RUC <span class='text-red-600'>*</span></p>
+          </div>
+          <div class='flex-1 flex items-center gap-4'>
+            <div class='w-full'>
+              <input type="text" value="{{opcion.numeroruc}}" name="numeroruc" required class='w-full py-2 px-4 outline-none rounded-lg dark:bg-secondary-900 bg-gray-300' placeholder='Número RUC' />
             </div>
           </div>
         </div>
