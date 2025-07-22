@@ -222,4 +222,16 @@ class Opciones(models.Model):
     class Meta:
         managed = False
         db_table = 'opciones'
+
+class Cocinas(models.Model):
+    cocinaid = models.AutoField(db_column='cocinaId', primary_key=True)  # Field name made lowercase.
+    hora = models.TimeField()
+    estado = models.IntegerField()
+    mesaid = models.ForeignKey('Mesas', models.DO_NOTHING, db_column='mesaId', blank=True, null=True)  # Field name made lowercase.
+    platoid = models.ForeignKey('Platos', models.DO_NOTHING, db_column='platoId')  # Field name made lowercase.
+    detalleid = models.ForeignKey('Detallecuentatemporalplato', models.DO_NOTHING, db_column='detalleId', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'cocinas'
         
