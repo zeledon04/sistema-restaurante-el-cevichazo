@@ -141,6 +141,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 }, 500); // igual a duration-300 (300ms)
             });
         }
+        
+        actualizarTotal();
+
     });
 
     document.addEventListener('click', function (e) {

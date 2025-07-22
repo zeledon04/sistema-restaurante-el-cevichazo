@@ -99,7 +99,7 @@ async function guardarFactura() {
     } else if (tipoPago === '3') {
         efectivoCordoba = parseFloat(document.getElementById('efectivo').value.trim()) || 0;
         efectivoDolar = parseFloat(document.getElementById('efectivo-mixto').value.trim()) || 0;
-        const totalEnCordoba = efectivoCordoba + (efectivoCordoba * tasaCambio);
+        const totalEnCordoba = efectivoCordoba + (efectivoDolar * tasaCambio);
         if (efectivoCordoba === 0 || efectivoDolar === 0 || totalEnCordoba < total) {
             Swal.fire({ icon: 'error', title: 'Error', text: 'Monto insuficiente' });
             return;

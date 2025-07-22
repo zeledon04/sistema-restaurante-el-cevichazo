@@ -1,4 +1,6 @@
 import json
+import os
+from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render
 
@@ -152,7 +154,9 @@ def guardar_Factura_Unica(request):
                         cantidad=cantidad,
                         preciounitario=precio,
                     )
-                
+                    
+            imprimir(factura.facturaid)        
+            
             return JsonResponse({"success": True, "message": "Factura guardada correctamente"})
             
         except Exception as e:
@@ -160,4 +164,93 @@ def guardar_Factura_Unica(request):
         
     return JsonResponse({"success": False, "message": "Método no permitido"})
     
-    
+
+
+from escpos.printer import Win32Raw
+ # para convertir fecha si usas timezone
+from PIL import Image
+
+def imprimir(facturaid):
+    try:
+        printer = Win32Raw("POS-58")
+
+        factura = Facturas.objects.get(facturaid=facturaid)
+        detalles_platos = Detallefacturaplato.objects.filter(facturaid=factura)
+        detalles_productos = Detallefacturaproducto.objects.filter(facturaid=factura)
+        opc = Opciones.objects.first()
+        
+        logo_path = os.path.join(settings.BASE_DIR, "restaurante/static/image/logo.bmp")
+        if os.path.exists(logo_path):
+            print("Imprimiendo logo...")
+            img = Image.open(logo_path)
+            printer.image(img) 
+        
+        printer.text("RUC: " + opc.numeroruc + "\n")
+        printer.text("Telefono: " + opc.telefono + "\n")
+        printer.text(f"Factura No: {factura.facturaid}\n")
+
+        printer.text(f"Cliente: {factura.clientenombre}\n")
+        
+        fecha_local = timezone.now()
+        printer.text(f"Fecha: {fecha_local.strftime('%d/%m/%Y %H:%M')}\n")
+        printer.text("--------------------------------\n")
+
+        total = 0
+        printer.text("Items     Uds    Precio     SubT\n")
+
+        def formato_linea(nombre, cantidad, precio):
+            subtotal = cantidad * precio
+            # Línea 1: nombre del producto, cortado si es necesario
+            linea1 = nombre[:32]
+
+            # Línea 2: concatenar los valores y alinear a la derecha
+            cant_str = str(cantidad).rjust(2)
+            precio_str = f"C${precio:.2f}"
+            subtotal_str = f"C${subtotal:.2f}"
+            linea2 = f"{cant_str}   {precio_str}  {subtotal_str}".rjust(32)
+
+            return linea1 + "\n" + linea2
+
+        # Platos
+        if detalles_platos.exists():
+            for det in detalles_platos:
+                nombre = det.platoid.nombre
+                cantidad = det.cantidad
+                precio = det.preciounitario
+                total += cantidad * precio
+                printer.text(formato_linea(nombre, cantidad, precio) + "\n")
+
+        # Productos
+        if detalles_productos.exists():
+            for det in detalles_productos:
+                nombre = det.productoid.nombre
+                cantidad = det.cantidad
+                precio = det.preciounitario
+                total += cantidad * precio
+                printer.text(formato_linea(nombre, cantidad, precio) + "\n")
+
+        printer.text("--------------------------------\n")
+        total_line = f"Total:{f'C${total:.2f}'.rjust(26)}"
+        
+        tasa_cambio_line = f"Tasa de Cambio: {f'C${factura.tasacambio}':>15}"
+        pago_line = f"Pago en Dólares: {f'${factura.dolares:.2f}':>15}"
+        pago_line2 = f"Pago en Córdobas:  {f'C${factura.cordobas:.2f}':>13}"
+        # Cálculo del cambio
+        cambio = float(factura.cordobas) + (float(factura.dolares) * float(factura.tasacambio)) - total
+        cambio_line = f"Cambio:   {f'C${cambio:.2f}':>22}"
+
+        # Impresión
+        printer.text(total_line + "\n")
+        printer.text(tasa_cambio_line + "\n")
+        printer.text(pago_line + "\n")
+        printer.text(pago_line2 + "\n")
+        printer.text(cambio_line + "\n")
+        printer.text("--------------------------------\n")
+        printer.text(opc.mensaje)
+        printer.text("\n\n\n\n\n\n")
+        printer.cashdraw(2)
+        printer.close()  # Cerrar la impresora
+        print("Factura impresa exitosamente.")
+
+    except Exception as e:
+        print(f"Error al imprimir la factura: {e}")
