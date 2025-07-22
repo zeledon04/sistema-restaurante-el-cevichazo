@@ -75,6 +75,8 @@ urlpatterns = [
     
     #urls para listar cocinas
     path('cocinas/listar/', cocinas.listarCocinas, name='listar_cocinas'),
+    path('cocina/estado/', cocinas.cocina_estado, name='cocina_estado'),
+    path('enviar-a-cocina/', cocinas.enviar_a_cocina, name='enviar_a_cocina'),
     
     path('api/tasa-cambio/', view.obtener_tasa_cambio, name='tasa_cambio'),
     

@@ -139,6 +139,19 @@ CREATE TABLE historialVentas (
     FOREIGN KEY (platoId) REFERENCES platos(platoId)
 );
 
+-- Tabla cocinas
+CREATE TABLE cocinas(
+	cocinaId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	hora time NOT NULL DEFAULT CURRENT_TIME,
+	estado INTEGER NOT NULL DEFAULT 0, -- 0 = Pendiente, 1 = Listo, 2 = En proceso.
+	mesaId INTEGER,
+	platoId INTEGER NOT NULL,
+	detalleId INTEGER,
+	FOREIGN KEY (mesaId) REFERENCES mesas(mesaId),
+	FOREIGN KEY (platoId) REFERENCES platos(platoId),
+	FOREIGN KEY (detalleId) REFERENCES detalleCuentaTemporalPlato(detalleId)
+);
+
 --ALTER TABLE platos ADD COLUMN estado INTEGER DEFAULT 1
 --ALTER TABLE platos ADD COLUMN rutaFoto TEXT
 --ALTER TABLE platos ADD COLUMN updated_at TEXT
@@ -168,3 +181,7 @@ VALUES
 SELECT productoId, SUM(cantidadTotal) AS total_vendido
 FROM historialVentas
 GROUP BY productoId
+
+ALTER TABLE opciones ADD COLUMN numeroRUC TEXT
+
+SELECT * FROM mesas
