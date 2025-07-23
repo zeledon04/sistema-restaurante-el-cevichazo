@@ -20,21 +20,26 @@ function actualizarVistaCocina(data) {
     
     data.datos.forEach(cocina => {
         // Si no hemos registrado una hora de inicio para esta cocina, la agregamos
-        if (!timestartMap[cocina.cocinaid]) {
-            let horaInicioStr = null;
-            
-            if (cocina.estado === 0){
-                horaInicioStr = cocina.hora; // Hora de inicio
-            } else if (cocina.estado === 2){
-                horaInicioStr = cocina.horapreparacion; // Hora de preparación
-            } else if (cocina.estado === 1){
-                horaInicioStr = cocina.horafinalizada; // Hora finalizada
-            }
-            
-            if (horaInicioStr) {
-                timestartMap[cocina.cocinaid] = new Date(horaInicioStr); // Marca hora de aparición
+        let horaInicioStr = null;
+
+        if (cocina.estado === 0){
+            horaInicioStr = cocina.hora;
+        } else if (cocina.estado === 2){
+            horaInicioStr = cocina.horapreparacion;
+        } else if (cocina.estado === 1){
+            horaInicioStr = cocina.horafinalizada;
+        }
+
+        if (horaInicioStr) {
+            const nuevaHora = new Date(horaInicioStr);
+            const actual = timestartMap[cocina.cocinaid];
+
+            // Actualiza si no existe, o si el estado cambió
+            if (!actual || Math.abs(actual.getTime() - nuevaHora.getTime()) > 1000) {
+                timestartMap[cocina.cocinaid] = nuevaHora;
             }
         }
+
         
         const estilo = obtenerEstilosPorEstado(cocina.estado);
         const card  = document.createElement("div");
@@ -144,6 +149,8 @@ function actualizarVistaCocina(data) {
 
     });
 
+    // Agrega el evento a los botones de ver detalles
+    // para cambiar el estado de la cocina
     document.querySelectorAll(".ver-detalles").forEach(boton => {
         boton.addEventListener("click", async (e) => {
             const cocinaId = e.currentTarget.dataset.id;
@@ -175,7 +182,7 @@ function actualizarVistaCocina(data) {
     });
 }
 
-
+// Función para actualizar la hora viva
 function actualizarHora() {
     const ahora = new Date();
 
@@ -208,9 +215,9 @@ setInterval(() => {
             // console.log("Datos recibidos:", data)
         )
         .catch(err => console.error('Error al cargar pedidos:', err));
-}, 500); 
+}, 2000); 
 
-
+// Función para obtener estilos según el estado, solo para eso.
 function obtenerEstilosPorEstado(estado) {
     switch (estado) {
         case 0: // Pendiente
@@ -239,7 +246,6 @@ function obtenerEstilosPorEstado(estado) {
             };
     }
 }
-
 
 // Esto para la seguridad, el crf normal de los formularios.
 function getCookie(name) {

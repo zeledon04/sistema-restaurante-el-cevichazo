@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from ..view import datosUser
 from django.views.decorators.csrf import csrf_exempt
 from ..utils import login_required
-from datetime import datetime, date, timezone
+from datetime import datetime, date
 from django.utils import timezone
 from django.templatetags.static import static
 import json
@@ -79,7 +79,7 @@ def enviar_a_cocina(request):
             mesaid_id=mesaId,
             platoid_id=platoId,
             estado=0,  # Pendiente por defecto
-            hora = datetime.now().strftime("%H:%M")
+            hora = timezone.now().time(),
         )
         cocinas.save()
         return JsonResponse({"status": "success"})

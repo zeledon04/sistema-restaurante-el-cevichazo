@@ -82,7 +82,7 @@ const btnHidden = document.querySelector(".hidden-menu");
 const sidebar = document.querySelector(".sidebar"); 
 
 btnHidden.addEventListener("click", () => {
-  console.log("¡Botón clickeado!");
+  // console.log("¡Botón clickeado!");
 
   const close = document.querySelector(".close");
 
