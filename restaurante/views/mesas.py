@@ -73,11 +73,6 @@ def agregarMesa(request):
 
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
-
-def  agregarCuentas(request, id):
-    return render(request, 'pages/mesas/agregarCuentas.html')
-
-
 def obtener_meseros(request):
     meseros = Usuarios.objects.filter(rol=2).values('usuarioid', 'nombre')
     return JsonResponse(list(meseros), safe=False)
