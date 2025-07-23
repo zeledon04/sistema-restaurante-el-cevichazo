@@ -4,9 +4,6 @@ document.addEventListener("DOMContentLoaded", function () {
         buscarProductos(this.value);
     });
 
-    
-
-
     document.addEventListener('click', function (e) {
         const target = e.target.closest('.ver-detalles');
         if (target) {

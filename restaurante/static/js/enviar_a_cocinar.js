@@ -2,11 +2,9 @@ document.getElementById("btnEnviarCocina").addEventListener("click", () => {
     const btn = document.getElementById("btnEnviarCocina");
     const mesaId = btn.getAttribute("data-mesa");
     const platoId = btn.getAttribute("data-plato");
-    const detalleId = btn.getAttribute("data-detalle");
     const body = {
         mesaId,
-        platoId,
-        detalleId
+        platoId
     };
     console.log("Enviando a cocina:", body);
     fetch("/enviar-a-cocina/", {
@@ -20,10 +18,10 @@ document.getElementById("btnEnviarCocina").addEventListener("click", () => {
     })
     .then(res => res.json())
     .then(data => {
-        if(data.status === "ok"){
-            alert("Pedido enviado a cocina");
+        if(data.status === "success") {
+            console.log("Pedido enviado a cocina:", data);
         } else {
-            alert("Error al enviar");
+            console.error("Error al enviar a cocina:", data);
         }
     })
     .catch(err => console.error("Error:", err));
