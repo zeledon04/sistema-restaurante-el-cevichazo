@@ -33,6 +33,7 @@
 
     <!-- Overlay y ventana emergente -->
     <div id="overlay" class="fixed inset-0 bg-opacity-40 hidden z-40">
+      
       <div onclick="event.stopPropagation()" class="absolute top-15 right-10 bg-gray-100 border-gray-300 border-1 rounded-lg shadow-lg p-4 w-[26rem] max-h-[80vh] z-50">
         <h1 class='text-gray-950 text-center font-medium'>
           {% comment %} Notificaciones ({{ numeroNotificaciones }}) {% endcomment %}
@@ -42,6 +43,29 @@
         <hr class='my-2 mt-5 border-gray-300 px-5' />
 
         <div class="max-h-[70vh] overflow-y-auto">
+
+          <!-- Esto para las notificaciones en verdes que me dijiste, Jair, que tenían que ir para notificar listo plato CREEOOOO -->
+          <div class='p-0 hover:bg-transparent hover:cursor-pointer'>
+            <a to="/" class='flex flex-1 items-center gap-4 py-2 px-4 hover:bg-gray-300 transition-colors rounded-lg'>
+
+              <svg class="size-6 text-4xl p-2 rounded-lg box-content bg-green-500/10 text-green-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg>
+
+              <div class='text-sm flex flex-col w-full'>
+                <div class='flex items-center justify-between gap-4'>
+                  {% comment %} <span class='text-black'>Bajo Stock</span>
+                  <span class='text-black'>{{ notificacion.nombre }}</span>
+                  <span class='text-black'>Stock: {{ notificacion.stock }}</span> {% endcomment %}
+
+                  <span class='text-black'>Ceviche</span>
+                  <span class='text-[12px] text-gray-700'>Mesa 7</span>    
+                </div>
+                <p class='truncate text-green-500 text-xs font-semibold'>¡LISTO!</p>
+              </div>
+            </a>
+          </div>
+
 
           {% comment %} {% for notificacion in notisStock %} {% endcomment %}
           <div class='p-0 hover:bg-transparent hover:cursor-pointer'>
@@ -55,10 +79,10 @@
                   <span class='text-black'>{{ notificacion.nombre }}</span>
                   <span class='text-black'>Stock: {{ notificacion.stock }}</span> {% endcomment %}
 
-                  <span class='text-black'>Acetamenofén</span>
-                  <span class='text-[12px] text-gray-700'>Stock: 7</span>    
+                  <span class='text-black'>Gallo Pinto</span>
+                  <span class='text-[12px] text-gray-700'>Mesa 5</span>    
                 </div>
-                <p class='truncate text-yellow-500 text-xs font-semibold'>Bajo Stock</p>
+                <p class='truncate text-yellow-500 text-xs font-semibold'>¡PENDIENTE!</p>
               </div>
             </a>
           </div>
@@ -74,10 +98,10 @@
                   <span class='text-black'>{{ notificacion.nombre }}</span>
                   <span class='text-black'>Stock: {{ notificacion.stock }}</span> {% endcomment %}
 
-                  <span class='text-black'>Acetamenofén</span>
-                  <span class='text-[12px] text-gray-700'>Stock: 7</span>    
+                  <span class='text-black'>Gallo Pinto</span>
+                  <span class='text-[12px] text-gray-700'>Mesa 5</span>    
                 </div>
-                <p class='truncate text-yellow-500 text-xs font-semibold'>Bajo Stock</p>
+                <p class='truncate text-yellow-500 text-xs font-semibold'>¡PENDIENTE!</p>
               </div>
             </a>
           </div>
@@ -93,29 +117,10 @@
                   <span class='text-black'>{{ notificacion.nombre }}</span>
                   <span class='text-black'>Stock: {{ notificacion.stock }}</span> {% endcomment %}
 
-                  <span class='text-black'>Acetamenofén</span>
-                  <span class='text-[12px] text-gray-700'>Stock: 7</span>    
+                  <span class='text-black'>Gallo Pinto</span>
+                  <span class='text-[12px] text-gray-700'>Mesa 5</span>    
                 </div>
-                <p class='truncate text-yellow-500 text-xs font-semibold'>Bajo Stock</p>
-              </div>
-            </a>
-          </div>
-
-          <div class='p-0 hover:bg-transparent hover:cursor-pointer'>
-            <a to="/" class='flex flex-1 items-center gap-4 py-2 px-4 hover:bg-gray-300 transition-colors rounded-lg'>
-              <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-4xl p-2 rounded-lg box-content bg-yellow-500/10 text-yellow-500">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
-              </svg>
-              <div class='text-sm flex flex-col w-full'>
-                <div class='flex items-center justify-between gap-4'>
-                  {% comment %} <span class='text-black'>Bajo Stock</span>
-                  <span class='text-black'>{{ notificacion.nombre }}</span>
-                  <span class='text-black'>Stock: {{ notificacion.stock }}</span> {% endcomment %}
-
-                  <span class='text-black'>Acetamenofén</span>
-                  <span class='text-[12px] text-gray-700'>Stock: 7</span>    
-                </div>
-                <p class='truncate text-yellow-500 text-xs font-semibold'>Bajo Stock</p>
+                <p class='truncate text-yellow-500 text-xs font-semibold'>¡PENDIENTE!</p>
               </div>
             </a>
           </div>
@@ -135,7 +140,7 @@
                   <span class='text-black'>{{ notisficacion.nombre }}</span>
                   <span class='text-black '>Fecha: {{ notisficacion.fecha_vencimiento }}</span> {% endcomment %}
 
-                  <span class='text-black'>vental</span>
+                  <span class='text-black'>Cerveza Corona</span>
                   <span class='text-[12px] text-gray-700'>Fecha: 2025-07-15</span>
                 </div>
                 <p class='truncate text-red-500 text-xs font-semibold'>Expira Pronto</p>
@@ -154,7 +159,7 @@
                   <span class='text-black'>{{ notisficacion.nombre }}</span>
                   <span class='text-black '>Fecha: {{ notisficacion.fecha_vencimiento }}</span> {% endcomment %}
 
-                  <span class='text-black'>vental</span>
+                  <span class='text-black'>Coca Cola</span>
                   <span class='text-[12px] text-gray-700'>Fecha: 2025-07-15</span>
                 </div>
                 <p class='truncate text-red-500 text-xs font-semibold'>Expira Pronto</p>
@@ -162,43 +167,7 @@
             </a>
           </div>
 
-          <div class='p-0 hover:bg-transparent hover:cursor-pointer'>
-            <a to="/" class='flex flex-1 items-center gap-4 py-2 px-4 hover:bg-gray-300 transition-colors rounded-lg'>
-              <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-4xl p-2 rounded-lg box-content bg-red-500/10 text-red-500">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
-              </svg>
-              <div class='text-sm flex flex-col w-full'>
-                <div class='flex items-center justify-between gap-4'>
-                  {% comment %} <span class='text-black'>Expira Pronto</span>
-                  <span class='text-black'>{{ notisficacion.nombre }}</span>
-                  <span class='text-black '>Fecha: {{ notisficacion.fecha_vencimiento }}</span> {% endcomment %}
 
-                  <span class='text-black'>vental</span>
-                  <span class='text-[12px] text-gray-700'>Fecha: 2025-07-15</span>
-                </div>
-                <p class='truncate text-red-500 text-xs font-semibold'>Expira Pronto</p>
-              </div>
-            </a>
-          </div>
-
-          <div class='p-0 hover:bg-transparent hover:cursor-pointer'>
-            <a to="/" class='flex flex-1 items-center gap-4 py-2 px-4 hover:bg-gray-300 transition-colors rounded-lg'>
-              <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-4xl p-2 rounded-lg box-content bg-red-500/10 text-red-500">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
-              </svg>
-              <div class='text-sm flex flex-col w-full'>
-                <div class='flex items-center justify-between gap-4'>
-                  {% comment %} <span class='text-black'>Expira Pronto</span>
-                  <span class='text-black'>{{ notisficacion.nombre }}</span>
-                  <span class='text-black '>Fecha: {{ notisficacion.fecha_vencimiento }}</span> {% endcomment %}
-
-                  <span class='text-black'>vental</span>
-                  <span class='text-[12px] text-gray-700'>Fecha: 2025-07-15</span>
-                </div>
-                <p class='truncate text-red-500 text-xs font-semibold'>Expira Pronto</p>
-              </div>
-            </a>
-          </div>
           {% comment %} <hr class='my-2 border-gray-300 px-5' /> {% endcomment %}
           {% comment %} {% endfor %} {% endcomment %}
         

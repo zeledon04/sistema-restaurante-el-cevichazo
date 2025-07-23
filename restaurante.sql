@@ -142,26 +142,27 @@ CREATE TABLE historialVentas (
 -- Tabla cocinas
 CREATE TABLE cocinas(
 	cocinaId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	hora time NOT NULL DEFAULT CURRENT_TIME,
+	hora time NOT NULL,
+	horaPreparacion time,
+	horaFinalizada time,
 	estado INTEGER NOT NULL DEFAULT 0, -- 0 = Pendiente, 1 = Listo, 2 = En proceso.
 	mesaId INTEGER,
 	platoId INTEGER NOT NULL,
-	detalleId INTEGER,
 	FOREIGN KEY (mesaId) REFERENCES mesas(mesaId),
-	FOREIGN KEY (platoId) REFERENCES platos(platoId),
-	FOREIGN KEY (detalleId) REFERENCES detalleCuentaTemporalPlato(detalleId)
+	FOREIGN KEY (platoId) REFERENCES platos(platoId)
 );
+
+ALTER TABLE cocinas ADD COLUMN horaFinalizada time
 
 --ALTER TABLE platos ADD COLUMN estado INTEGER DEFAULT 1
 --ALTER TABLE platos ADD COLUMN rutaFoto TEXT
 --ALTER TABLE platos ADD COLUMN updated_at TEXT
---ALTER TABLE platos RENAME COLUMN COLUMNestado TO estado;
+--ALTER TABLE cocinas RENAME COLUMN detalleId INTEGER TO detalleId INTEGER NULL;
 --ALTER TABLE lotesProductos ADD COLUMN stock integer not null
 --ALTER TABLE productos ADD COLUMN updated_at text
 --ALTER TABLE categoriasProducto RENAME COLUMN descripcion to nombre
 
 --INSERT INTO categoriasProducto (nombre, estado) VALUES (&quot;Cervezas&quot;, 1);
-
 
 
 SELECT * FROM historialVentas    
@@ -176,7 +177,7 @@ VALUES
 (1, 1, DATE('now')), -- 1 pastel
 (2, 3, DATE('now')); -- 3 tres leches
 
-
+hra time DEFAULT CURRENT_TIME
 
 SELECT productoId, SUM(cantidadTotal) AS total_vendido
 FROM historialVentas
@@ -184,4 +185,10 @@ GROUP BY productoId
 
 ALTER TABLE opciones ADD COLUMN numeroRUC TEXT
 
-SELECT * FROM mesas
+SELECT * FROM platos
+
+
+SELECT * FROM cocinas
+
+INSERT INTO cocinas (hora, mesaId, platoId)
+VALUES ("09:38:10", 1, 3);

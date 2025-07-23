@@ -3,7 +3,7 @@
 
     <div>
         <h1 class="text-center text-2xl font-bold mb-10">
-            {{ nombre}} <span class="text-[#E74C3C] text-2xl font-bold">.</span>
+            {{ nombre}} <span class="text-white text-2xl font-bold">.</span>
         </h1>
 
         <ul>
@@ -227,14 +227,14 @@
     </div>
 
     <nav>
-        <a onclick="recargarPagina()" class='flex items-center gap-4 py-2 px-4 rounded-lg cursor-pointer hover:bg-[#51556c9d] transition-colors'>
-            <svg class="size-6 text-[#E74C3C]"  fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <a onclick="recargarPagina()" class='flex items-center gap-4 py-2 px-4 rounded-lg cursor-pointer text-white hover:bg-gray-200 hover:text-cyan-600 bg-transparent font-semibold transition-all'>
+            <svg class="size-6"  fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
             </svg>
                 Recargar
         </a>
-        <a href="{% url "logout" %}" class='flex items-center gap-4 py-2 px-4 rounded-lg cursor-pointer hover:bg-[#51556c9d] transition-colors'>
-            <svg class="size-6 text-[#E74C3C]"  fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <a href="{% url "logout" %}" class='flex items-center gap-4 py-2 px-4 rounded-lg cursor-pointer text-white hover:bg-gray-200 hover:text-cyan-600 bg-transparent font-semibold transition-all'>
+            <svg class="size-6"  fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
             </svg>
                 Cerrar Sesión
@@ -243,7 +243,7 @@
       
 </div>
 
-<button class='hidden-menu xl:hidden fixed bottom-4 right-4 bg-orange-500 bg-gradient-to-t from-cyan-600 via-teal-600 to-emerald-600 text-white p-3 rounded-full z-50 cursor-pointer'>
+<button class='hidden-menu xl:hidden fixed bottom-4 right-4 bg-cyan-500 bg-gradient-to-t from-cyan-600 via-teal-600 to-emerald-600 text-white p-3 rounded-full z-50 cursor-pointer'>
 
     <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
