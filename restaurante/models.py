@@ -229,6 +229,8 @@ class Cocinas(models.Model):
     estado = models.IntegerField(default=0) # 0 = Pendiente, 1 = Listo, 2 = En proceso
     mesaid = models.ForeignKey('Mesas', models.DO_NOTHING, db_column='mesaId', blank=True, null=True)  # Field name made lowercase.
     platoid = models.ForeignKey('Platos', models.DO_NOTHING, db_column='platoId')  # Field name made lowercase.
+    horapreparacion = models.TimeField(db_column='horaPreparacion', blank=True, null=True)  # Field name made lowercase.
+    horafinalizada = models.TimeField(db_column='horaFinalizada', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
