@@ -78,6 +78,7 @@ urlpatterns = [
     path('cocinas/listar/', cocinas.listarCocinas, name='listar_cocinas'),
     path('cocina/estado/', cocinas.cocina_estado, name='cocina_estado'),
     path('enviar-a-cocina/', cocinas.enviar_a_cocina, name='enviar_a_cocina'),
+    path('cambiar-estado-cocina/<int:cocina_id>/', cocinas.cambiar_estado_cocina, name='cambiar_estado_cocina'),
     
     path('api/tasa-cambio/', view.obtener_tasa_cambio, name='tasa_cambio'),
     
