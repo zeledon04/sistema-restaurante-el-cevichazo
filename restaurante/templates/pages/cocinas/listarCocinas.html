@@ -11,43 +11,45 @@
         <div id="lista-pedidos" class="grid grid-flow-col auto-cols-[300px] gap-4">
         
         <!--
-            
+            {% for cocina in cocinas %} 
             <div class="flex flex-col justify-between rounded-lg">
 
                 <div class="flex-1 object-contain relative bg-gradient-to-tr from-gray-100 via-gray-300/90 to-gray-100 text-gray-800 rounded-lg rounded-b-none">
-                    <img src="{% static 'image/pulpo.avif' %}" alt="defaultImage" class="object-contain w-full h-32 rounded-lg rounded-b-none" />
+                    <img src="{% static 'productos/' %}{{cocina.platoid.rutafoto}}?v={{ plato.updated_at.timestamp }}" alt="defaultImage" class="object-contain w-full h-32 rounded-lg rounded-b-none" />
                     {% comment %} <img src="{% static 'productos/' %}{{ plato.rutafoto }}?v={{ plato.updated_at.timestamp }}" class="object-contain w-full h-32 rounded-lg rounded-b-none"> {% endcomment %}
 
                     
-                    <button class="ver-detalles flex items-center justify-center px-2 py-1 font-medium gap-1 absolute top-2 right-2 bg-opacity-90 bg-yellow-100 text-yellow-800 border border-yellow-200 rounded-full cursor-pointer transition-all duration-200 hover:scale-110"
-                            data-nombre="${plato.nombre}" 
-                            data-categoria="${plato.categoria || ''}" 
-                            data-descripcion="${plato.descripcion || 'Sin descripción'}"
-                            data-imagen="${plato.imagen}">
+                    <button class="ver-detalles flex items-center justify-center px-2 py-1 font-medium gap-1 absolute top-2 right-2 bg-opacity-90 bg-yellow-100 text-yellow-800 border border-yellow-200 rounded-full cursor-pointer transition-all duration-200 hover:scale-110">
                         
                         <svg class="size-3" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                         </svg>
-
+                        
+                        {% if cocina.estado == 0 %}
                         <span class="text-xs">Pendiente</span>
+                        {% elif cocina.estado == 1 %}
+                        <span class="text-xs">Listo</span>
+                        {% elif cocina.estado == 2 %}
+                        <span class="text-xs">En Proceso</span>
+                        {% endif %}
                     </button>
 
                     <div class="absolute top-2 left-2">
                         <div class="bg-black/60 rounded-full px-2 text-white border-0">
-                            # 1
+                            {% comment %} # {{ cocina.id }} {% endcomment %}
+                            # {{ forloop.counter }}
                         </div>
                     </div>
 
                     <div class="absolute bottom-2 right-3">
                         <i>
                             <div class="font-semibold text-yellow-800">
-                                Ceviche
+                                {{ cocina.platoid.nombre }}
                             </div>
                         </i>
                     </div>
 
                 </div>
-
 
                 <div class="flex items-center justify-between w-full p-2 bg-white rounded-lg rounded-t-none shadow-md">
 
@@ -61,14 +63,21 @@
                                     <svg class="size-3 w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                     </svg>
-                                    <span class="text-sm font-medium">Pendiente</span>
+                                    {% if cocina.estado == 0 %}
+                                    <span class="text-xs">Pendiente</span>
+                                    {% elif cocina.estado == 1 %}
+                                    <span class="text-xs">Listo</span>
+                                    {% elif cocina.estado == 2 %}
+                                    <span class="text-xs">En Proceso</span>
+                                    {% endif %}
                                 </div>
 
                                 <div class="flex items-center gap-1 text-sm text-muted-foreground">
                                     <svg class="size-3 w-3 h-3 " fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                     </svg>
-                                    <span>25 min</span>
+                                    <span>{{ cocina.hora }}</span>
+
                                 </div>
                             
                                 {% comment %} <span class="text-sm font-medium text-green-600">¡Servir ahora!</span> {% endcomment %}
@@ -81,6 +90,7 @@
                 </div>
 
             </div>
+            {% endfor %}
 
         -->
 
