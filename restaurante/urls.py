@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from . import view
-from .views import cajas, facts, mesas, platos, productos, categorias, lotes, opciones, cocinas
+from .views import cajas, facts, mesas, platos, productos, categorias, lotes, opciones, cocinas, cuentas
 from .views.charts import ventas, productosVend
 
 urlpatterns = [
@@ -20,9 +20,10 @@ urlpatterns = [
     # urls para las mesas
     path('mesas/listar/', mesas.listarMesas, name='listar_mesas'),
     path('mesas/agregar/', mesas.agregarMesa, name='agregar_mesa'),
-    path('mesas/agregarCuentas/<int:id>', mesas.agregarCuentas, name='agregar_cuentas'),
     path('api/meseros/', mesas.obtener_meseros, name='obtener_meseros'),
     
+    #urls para cuentas
+    path('cuentas/agregarCuentas/<int:id>', cuentas.agregarCuentas, name='agregar_cuentas'),
     
     path('buscar_productos/', facts.buscar_productos, name='buscar_productos'),
     path('cuentas/facturaUnica/', facts.nueva_Factura_Unica, name='nuevaFacturaUnica'),

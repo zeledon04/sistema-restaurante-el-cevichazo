@@ -506,9 +506,6 @@
   .h-\[50\%\] {
     height: 50%;
   }
-  .h-\[75vh\] {
-    height: 75vh;
-  }
   .h-\[98\%\] {
     height: 98%;
   }
@@ -602,9 +599,6 @@
   .w-45 {
     width: calc(var(--spacing) * 45);
   }
-  .w-48 {
-    width: calc(var(--spacing) * 48);
-  }
   .w-50 {
     width: calc(var(--spacing) * 50);
   }
@@ -649,9 +643,6 @@
   }
   .min-w-\[550px\] {
     min-width: 550px;
-  }
-  .min-w-\[642px\] {
-    min-width: 642px;
   }
   .flex-1 {
     flex: 1;
@@ -1154,9 +1145,6 @@
   }
   .p-10 {
     padding: calc(var(--spacing) * 10);
-  }
-  .px-0 {
-    padding-inline: calc(var(--spacing) * 0);
   }
   .px-2 {
     padding-inline: calc(var(--spacing) * 2);
