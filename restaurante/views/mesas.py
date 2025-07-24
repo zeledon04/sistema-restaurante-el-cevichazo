@@ -11,18 +11,26 @@ from ..view import datosUser
 # Create your views here.
 def listarMesas(request):
     user_data = datosUser(request)
+
     # Obtener todas las mesas ocupadas (estado=1)
     mesas_ocupadas = Mesas.objects.filter(estado=1)
-    # Obtener cuentas temporales activas (estado=1) relacionadas a esas mesas
-    cuentas = Cuentastemporales.objects.filter(mesaid__in=mesas_ocupadas, estado=1)
-    mesas = []
 
+    # Obtener todas las cuentas activas relacionadas a esas mesas
+    cuentas = Cuentastemporales.objects.filter(mesaid__in=mesas_ocupadas, estado=1)
+
+    mesas_dict = {}  # clave: mesaid, valor: cuenta representativa
     cont = 0
-    
+
     for cuenta in cuentas:
+        mesa_id = cuenta.mesaid.mesaid
+        if mesa_id not in mesas_dict:
+            mesas_dict[mesa_id] = cuenta
+            cont += 1  # contar solo una vez por mesa
+
+    mesas = []
+    for cuenta in mesas_dict.values():
         mesa = cuenta.mesaid
         mesero_nombre = cuenta.usuarioid.nombre if cuenta.usuarioid else "Sin mesero"
-        
         mesas.append({
             'mesa_id': mesa.mesaid,
             'numero': mesa.numero,
@@ -30,7 +38,6 @@ def listarMesas(request):
             'mesero': mesero_nombre,
             'hora': cuenta.fechacreacion,
         })
-        cont += 1
 
     return render(request, 'pages/mesas/listarMesas.html', {
         **user_data,

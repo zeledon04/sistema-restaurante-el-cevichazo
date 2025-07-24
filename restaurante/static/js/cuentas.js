@@ -1,3 +1,30 @@
+const cuentasContainer = document.querySelector('.cuentas-container');
+
+// Variable para almacenar la cuenta seleccionada actualmente
+let cuentaSeleccionada = null;
+
+cuentasContainer.addEventListener('click', function (e) {
+    // Busca el div con clase 'cuenta' más cercano al lugar donde se hizo clic
+    const divCuenta = e.target.closest('.cuenta');
+
+    if (divCuenta) {
+        // Desmarcar la cuenta anterior, si existe
+        if (cuentaSeleccionada) {
+            cuentaSeleccionada.classList.remove('bg-[#e0f7fa]', 'seleccionada');
+        }
+
+        // Marcar esta nueva cuenta como seleccionada
+        divCuenta.classList.add('bg-[#e0f7fa]', 'seleccionada');
+        cuentaSeleccionada = divCuenta;
+
+        // Puedes guardar el ID o cualquier otra info
+        const idCuenta = divCuenta.dataset.id;
+        console.log('Cuenta seleccionada:', idCuenta);
+    }
+});
+
+
+
 document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById('buscador').addEventListener('input', function () {
@@ -43,7 +70,12 @@ document.addEventListener("DOMContentLoaded", function () {
         let stock = parseInt(btn.getAttribute('data-stock'));
         const tipo = btn.getAttribute('data-tipo');
 
-        const tbody = document.getElementById('cuerpo-factura');
+        if (!cuentaSeleccionada) {
+            Swal.fire('Primero selecciona una cuenta');
+            return;
+        }
+
+        const tbody = cuentaSeleccionada.querySelector('.cuerpo-factura');
 
         const filaExistente = tbody.querySelector(`tr[data-id="${id}"][data-tipo="${tipo}"]`);
 
@@ -72,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             }
         } else {
-            
+
             if (tipo === 'producto' && stock <= 0) {
                 Swal.fire({
                     icon: 'warning',
@@ -83,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             const nuevaFila = document.createElement('tr');
-            
+
             nuevaFila.classList.add('table', 'w-[100%]', 'table-fixed');
             nuevaFila.setAttribute('data-id', id);
             nuevaFila.setAttribute('data-nombre', nombre);
@@ -138,7 +170,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }, 500); // igual a duration-300 (300ms)
             });
         }
-        
+
         actualizarTotal();
 
     });
@@ -170,25 +202,48 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+// function actualizarTotal() {
+//     let total = 0;
+//     const filas = document.querySelectorAll('#cuerpo-factura tr');
+
+//     filas.forEach(fila => {
+//         const cantidadInput = fila.querySelector('.cantidad');
+//         const precioInput = fila.querySelector('.precio');
+
+//         const cantidad = cantidadInput ? parseFloat(cantidadInput.value) || 0 : 0;
+//         const precio = precioInput ? parseFloat(precioInput.value) || 0 : 0;
+
+//         total += cantidad * precio;
+//     });
+
+//     const totalFinal = document.getElementById('total-final');
+//     if (totalFinal) {
+//         totalFinal.textContent = `C$${total.toFixed(2)}`;
+//     }
+// }
+
+
 function actualizarTotal() {
+    if (!cuentaSeleccionada) return;
+
+    const filas = cuentaSeleccionada.querySelectorAll('.cuerpo-factura tr');
     let total = 0;
-    const filas = document.querySelectorAll('#cuerpo-factura tr');
-    
+
     filas.forEach(fila => {
         const cantidadInput = fila.querySelector('.cantidad');
         const precioInput = fila.querySelector('.precio');
-        
         const cantidad = cantidadInput ? parseFloat(cantidadInput.value) || 0 : 0;
         const precio = precioInput ? parseFloat(precioInput.value) || 0 : 0;
-        
         total += cantidad * precio;
     });
 
-    const totalFinal = document.getElementById('total-final');
+    const totalFinal = cuentaSeleccionada.querySelector('.total-final');
     if (totalFinal) {
         totalFinal.textContent = `C$${total.toFixed(2)}`;
     }
 }
+
+
 
 function buscarProductos(query) {
     fetch(`/buscar_productos?q=${encodeURIComponent(query)}`, {
@@ -196,23 +251,23 @@ function buscarProductos(query) {
             'X-Requested-With': 'XMLHttpRequest'
         }
     })
-    .then(response => response.json())
-    .then(data => {
-        const contenedor = document.getElementById('productos-container');
-        contenedor.innerHTML = ''; // Limpiar el contenedor
+        .then(response => response.json())
+        .then(data => {
+            const contenedor = document.getElementById('productos-container');
+            contenedor.innerHTML = ''; // Limpiar el contenedor
 
-        data.productos.forEach((producto, index) => {
-            const elemento = crearProducto(producto);
-            elemento.classList.add('opacity-0', 'translate-y-5', 'transition-all', 'duration-500');
-            contenedor.appendChild(elemento);
+            data.productos.forEach((producto, index) => {
+                const elemento = crearProducto(producto);
+                elemento.classList.add('opacity-0', 'translate-y-5', 'transition-all', 'duration-500');
+                contenedor.appendChild(elemento);
 
-            void elemento.offsetHeight;
+                void elemento.offsetHeight;
 
-            setTimeout(() => {
-                elemento.classList.remove('opacity-0', 'translate-y-5');
-            }, index * 100); 
-        });
-    })
+                setTimeout(() => {
+                    elemento.classList.remove('opacity-0', 'translate-y-5');
+                }, index * 100);
+            });
+        })
 
 }
 
@@ -271,9 +326,14 @@ function crearProducto(producto) {
 
 
 function handleTipoPago() {
-    const tipo = document.getElementById('tipo').value;
-    const efectivo = document.getElementById('efectivo');
-    const container = document.getElementById('extra-efectivo');
+    if (!cuentaSeleccionada) {
+        Swal.fire('Selecciona una cuenta');
+        return;
+    }
+    const clienteNombre = cuentaSeleccionada.querySelector('.nombre-cliente');
+    const tipo = cuentaSeleccionada.querySelector('.tipo').value;
+    const efectivo = cuentaSeleccionada.querySelector('.efectivo');
+    const container = cuentaSeleccionada.querySelector('.extra-efectivo');
 
     // Limpiar el input mixto si existe
     container.innerHTML = '';
@@ -285,6 +345,8 @@ function handleTipoPago() {
         efectivo.placeholder = 'Dolares';
         efectivo.style.display = 'block';
     } else if (tipo == '3') {
+        clienteNombre.classList.remove('w-40');
+        clienteNombre.classList.add('w-24');
         efectivo.placeholder = 'Cordobas';
         efectivo.style.display = 'block';
 
@@ -292,7 +354,7 @@ function handleTipoPago() {
         nuevoInput.type = 'text';
         nuevoInput.id = 'efectivo-mixto';
         nuevoInput.placeholder = 'Dolares';
-        efectivo.classList.remove('w-45');
+        efectivo.classList.remove('w-24');
         efectivo.classList.add('w-24');
         nuevoInput.className = 'p-2 dark:bg-secondary-900 bg-gray-300 outline-none rounded-lg w-24 mr-1';
         container.appendChild(nuevoInput);
