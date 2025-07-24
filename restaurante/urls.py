@@ -24,7 +24,8 @@ urlpatterns = [
     
     #urls para cuentas
     path('cuentas/agregarCuentas/<int:id>', cuentas.agregarCuentas, name='agregar_cuentas'),
-    
+    path('cuentas/crearCuenta/', cuentas.crear_cuenta_temporal, name='crear_cuenta_temporal'),
+
     path('buscar_productos/', facts.buscar_productos, name='buscar_productos'),
     path('cuentas/facturaUnica/', facts.nueva_Factura_Unica, name='nuevaFacturaUnica'),
     path('guardar-factura-unica/', facts.guardar_Factura_Unica, name='guardarFacturaUnica'),
