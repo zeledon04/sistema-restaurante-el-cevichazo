@@ -90,9 +90,9 @@ function actualizarVistaCocina(data) {
 
             <div class="flex items-center justify-between w-full p-2 bg-white rounded-lg rounded-t-none shadow-md">
 
-                <div class="flex w-full items-center justify-between mt-2">
+                <div class="flex w-full items-center justify-between">
                     
-                    <div class="rounded-lg p-3  w-full ${estilo.bg} border border-gray-200 text-gray-800">
+                    <div class="rounded-lg p-2 w-full ${estilo.bg} border border-gray-200 text-gray-800">
                         
                         <div class="flex items-center justify-between">
                             
