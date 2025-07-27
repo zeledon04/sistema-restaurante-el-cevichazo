@@ -8,19 +8,18 @@ from ..utils import login_required
 from datetime import datetime, date
 from django.utils import timezone
 from django.templatetags.static import static
+from django.utils.dateformat import format
+
 import json
+
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 @login_required
 def listarCocinas(request):
     user_data = datosUser(request)
-    mesas = Mesas.objects.filter(estado=1).order_by('mesaid')
-    platos = Cocinas.objects.filter(estado=1).order_by('platoid__platoid')
-    cocinas = Cocinas.objects.filter(estado=0).order_by('cocinaid')
     datos = {
         **user_data, 
-        'mesas': mesas,
-        'cocinas': cocinas,
-        'platos': platos,
     }
     # Render the template with the list of kitchens
     return render(request, 'pages/cocinas/listarCocinas.html', datos)
@@ -29,20 +28,29 @@ def cocina_estado(request):
     datos =[]
     cocinas = Cocinas.objects.filter(estado__in=[0, 1, 2])
     for cocina in cocinas:
-        # Convertir TimeField a datetime con la fecha de hoy
-        hora_iso = datetime.combine(date.today(), cocina.hora).isoformat() if cocina.hora else None
-        prep_iso = datetime.combine(date.today(), cocina.horapreparacion).isoformat() if cocina.horapreparacion else None
-        fin_iso = datetime.combine(date.today(), cocina.horafinalizada).isoformat() if cocina.horafinalizada else None
+        
+        hora_mostrar = None
+        if cocina.estado == 0:
+            hora_mostrar = format(cocina.hora, 'c')
+        elif cocina.estado == 1:
+            hora_mostrar = format(cocina.horafinalizada, 'c')
+        elif cocina.estado == 2:
+            hora_mostrar = format(cocina.horapreparacion, 'c')
+
+        mesaOnombre = None
+        if not cocina.mesaid:
+            mesaOnombre = cocina.cliente
+        else:
+            mesaOnombre = cocina.mesaid.numero
+            
         
         datos.append({
             "cocinaid": cocina.cocinaid,
             "plato": cocina.platoid.nombre,
             "imagen": static('productos/' + str(cocina.platoid.rutafoto)) if cocina.platoid.rutafoto else static('img/defaultImage.png'),
-            "hora": hora_iso,
-            "horapreparacion": prep_iso,
-            "horafinalizada": fin_iso,
-            "estado": cocina.estado,    
-            "mesa": cocina.mesaid.numero if cocina.mesaid else None,
+            "hora": hora_mostrar,
+            "estado": cocina.estado,
+            "mesa": mesaOnombre,
         })
         
     return JsonResponse({"datos":datos})
@@ -52,14 +60,15 @@ def cambiar_estado_cocina(request, cocina_id):
     if request.method == "POST":
         data = json.loads(request.body)
         nuevo_estado = data.get("estado")
+        print(f"Cambiando estado de cocina {cocina_id} a {nuevo_estado}")
 
         cocina = Cocinas.objects.get(pk=cocina_id)
         cocina.estado = nuevo_estado
 
         if nuevo_estado == 2:  # En Proceso
-            cocina.horapreparacion = timezone.now().time()
+            cocina.horapreparacion = timezone.now()
         elif nuevo_estado == 1:  # Listo
-            cocina.horafinalizada = timezone.now().time()
+            cocina.horafinalizada = timezone.now()
 
         cocina.save()
         return JsonResponse({"success": True})
@@ -67,19 +76,27 @@ def cambiar_estado_cocina(request, cocina_id):
 
 def enviar_a_cocina(request):
     body = json.loads(request.body)
-    mesaId = body.get("mesaId")
-    platoId = body.get("platoId")  
-    if not mesaId or not platoId:
-        return JsonResponse({"status": "error", "message": "Datos incompletos."}, status=400)
-    print(f"Enviando a cocina: Mesa {mesaId}, Plato {platoId}")
+    front = body.get("front")
+    print("Front value:", front)
+    numeroMesa = body.get("mesaId")
+    nombreCliente = body.get("nombreCliente")
+    platoId = body.get("platoId")
+    if front == "1":
+        mesa = Mesas.objects.filter(mesaid=numeroMesa).first()
+        
+    else:
+        mesa = Mesas.objects.filter(numero=numeroMesa).first()
+        if not mesa:
+            mesa = None
 
     # Crear registro en cocina
     try:
         cocinas = Cocinas(
-            mesaid_id=mesaId,
+            mesaid=mesa,
             platoid_id=platoId,
             estado=0,  # Pendiente por defecto
-            hora = timezone.now().time(),
+            hora=timezone.now(),
+            cliente=nombreCliente if nombreCliente else None,
         )
         cocinas.save()
         return JsonResponse({"status": "success"})

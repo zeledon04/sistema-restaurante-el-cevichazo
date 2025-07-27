@@ -36,7 +36,7 @@ def listarMesas(request):
             'numero': mesa.numero,
             'cliente': cuenta.clientenombre,
             'mesero': mesero_nombre,
-            'hora': cuenta.fechacreacion,
+            'hora': mesa.fecha,
         })
 
     return render(request, 'pages/mesas/listarMesas.html', {
@@ -59,7 +59,7 @@ def agregarMesa(request):
 
         try:
             # Crear mesa
-            nueva_mesa = Mesas(numero=numero, mesero=mesero_id, estado=1)
+            nueva_mesa = Mesas(numero=numero, mesero=mesero_id, estado=1, fecha=timezone.now())
             nueva_mesa.save()
 
             # Crear cuenta temporal (factura temporal)
@@ -73,7 +73,7 @@ def agregarMesa(request):
             )
             cuenta.save()
 
-            return JsonResponse({'message': 'Mesa y cuenta temporal creadas exitosamente'})
+            return JsonResponse({'message': 'Mesa creada exitosamente'})
         
         except Exception as e:
             return JsonResponse({'error': f'Error al guardar: {str(e)}'}, status=500)

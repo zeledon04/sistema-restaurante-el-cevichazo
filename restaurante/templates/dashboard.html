@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %} 
-<div>
+<div class="max-h-[80vh]">
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-2 mb-4">
         {% include "components/cardTicket_A_Caja.html" %}
         {% include "components/cardTicket_C_Caja.html" %}
         {% include "components/cardTicket_Efectivo_Caja.html" %}
         {% include "components/cardTicket_Product.html" %}
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg-grid-cols-2 xl:grid-cols-2 gap-4 mb-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg-grid-cols-2 xl:grid-cols-2 gap-2 mb-4">
         <!-- Ventas -->
         <div class="containBarChart bg-white shadow-2xl p-4 rounded-xl border border-gray-300">
 

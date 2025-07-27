@@ -106,6 +106,11 @@ async function guardarFactura() {
         }
         cambio = totalEnCordoba - total;
     } else if (tipoPago === '4') {
+        efectivoCordoba = document.getElementById('efectivo').value.trim();
+        if (!efectivoCordoba) {
+            Swal.fire({ icon: 'error', title: 'Error', text: 'Ingrese el numero de referencia' });
+            return;
+        }   
         cambio = 0;
     }
 

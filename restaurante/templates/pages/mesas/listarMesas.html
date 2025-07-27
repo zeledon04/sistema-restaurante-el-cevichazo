@@ -42,13 +42,6 @@
         </div>
       {% for info in mesas %}
       <div onclick="window.location.href='{% url "agregar_cuentas" info.mesa_id %}'" class="relative flex flex-col items-center space-y-2 p-4 px-4 pb-4 bg-gray-50 rounded-lg shadow-md cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105">
-  
-        <!-- Botón X en la esquina superior derecha -->
-        <button onclick="event.stopPropagation(); console.log('click hijo')" class="cursor-pointer absolute top-2 right-2 bg-red-500 hover:bg-red-700 hover:scale-120 transition-all duration-200 rounded-full p-1 text-white">
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
 
         <div class="text-xl font-bold text-gray-900">Mesa {{ info.numero }}</div>
 

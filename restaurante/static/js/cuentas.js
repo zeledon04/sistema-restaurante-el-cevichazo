@@ -1,29 +1,19 @@
 const cuentasContainer = document.querySelector('.cuentas-container');
-
-// Variable para almacenar la cuenta seleccionada actualmente
 let cuentaSeleccionada = null;
 
 cuentasContainer.addEventListener('click', function (e) {
-    // Busca el div con clase 'cuenta' más cercano al lugar donde se hizo clic
     const divCuenta = e.target.closest('.cuenta');
 
     if (divCuenta) {
-        // Desmarcar la cuenta anterior, si existe
         if (cuentaSeleccionada) {
             cuentaSeleccionada.classList.remove('bg-[#e0f7fa]', 'seleccionada');
         }
-
-        // Marcar esta nueva cuenta como seleccionada
         divCuenta.classList.add('bg-[#e0f7fa]', 'seleccionada');
         cuentaSeleccionada = divCuenta;
 
-        // Puedes guardar el ID o cualquier otra info
         const idCuenta = divCuenta.dataset.id;
-        console.log('Cuenta seleccionada:', idCuenta);
     }
 });
-
-
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -94,8 +84,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 const nuevoSubtotal = (cantidad * nuevoPrecio).toFixed(2);
                 filaExistente.querySelector('.subtotal').textContent = `C$ ${nuevoSubtotal}`;
 
-                actualizarTotal();
-
             } else {
                 Swal.fire({
                     icon: 'warning',
@@ -122,22 +110,49 @@ document.addEventListener("DOMContentLoaded", function () {
             nuevaFila.setAttribute('data-tipo', tipo);
 
             if (tipo === 'producto') {
+                nuevaFila.setAttribute('data-producto', id);
+            } else {
+                nuevaFila.setAttribute('data-plato', id);
+            }
+
+            if (tipo === 'producto') {
                 nuevaFila.setAttribute('data-stock', stock);
             }
             const maxAttr = tipo === 'producto' ? `max="${stock}"` : '';
 
+            let botonExtra = '';
+
+            const cuentasContainer = document.querySelector(".cuentas-container");
+            const mesaId = cuentasContainer.getAttribute("data-mesa");
+            if (tipo === 'plato') {
+                botonExtra = `
+                    <button 
+                        data-front="1"
+                        data-mesa="${mesaId}"
+                        data-plato="${id}"
+                        class="text-blue-600 hover:text-blue-800 mandar-cocina cursor-pointer p-1 rounded-lg hover:bg-gray-200">
+                        <svg class="size-6 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 18H19.75H19ZM5 14.584H5.75C5.75 14.2859 5.57345 14.016 5.30028 13.8967L5 14.584ZM19 14.584L18.6997 13.8967C18.4265 14.016 18.25 14.2859 18.25 14.584H19ZM15.75 7C15.75 7.41421 16.0858 7.75 16.5 7.75C16.9142 7.75 17.25 7.41421 17.25 7H15.75ZM6.75 7C6.75 7.41421 7.08579 7.75 7.5 7.75C7.91421 7.75 8.25 7.41421 8.25 7H6.75ZM14 21.25C13.5858 21.25 13.25 21.5858 13.25 22C13.25 22.4142 13.5858 22.75 14 22.75V21.25ZM10 22.75C10.4142 22.75 10.75 22.4142 10.75 22C10.75 21.5858 10.4142 21.25 10 21.25V22.75ZM7 4.25C3.82436 4.25 1.25 6.82436 1.25 10H2.75C2.75 7.65279 4.65279 5.75 7 5.75V4.25ZM17 5.75C19.3472 5.75 21.25 7.65279 21.25 10H22.75C22.75 6.82436 20.1756 4.25 17 4.25V5.75ZM9 21.25C8.03599 21.25 7.38843 21.2484 6.90539 21.1835C6.44393 21.1214 6.24643 21.0142 6.11612 20.8839L5.05546 21.9445C5.51093 22.4 6.07773 22.5857 6.70552 22.6701C7.31174 22.7516 8.07839 22.75 9 22.75V21.25ZM4.25 18C4.25 18.9216 4.24841 19.6883 4.32991 20.2945C4.41432 20.9223 4.59999 21.4891 5.05546 21.9445L6.11612 20.8839C5.9858 20.7536 5.87858 20.5561 5.81654 20.0946C5.75159 19.6116 5.75 18.964 5.75 18H4.25ZM18.25 18C18.25 18.964 18.2484 19.6116 18.1835 20.0946C18.1214 20.5561 18.0142 20.7536 17.8839 20.8839L18.9445 21.9445C19.4 21.4891 19.5857 20.9223 19.6701 20.2945C19.7516 19.6883 19.75 18.9216 19.75 18H18.25ZM15 22.75C15.9216 22.75 16.6883 22.7516 17.2945 22.6701C17.9223 22.5857 18.4891 22.4 18.9445 21.9445L17.8839 20.8839C17.7536 21.0142 17.5561 21.1214 17.0946 21.1835C16.6116 21.2484 15.964 21.25 15 21.25V22.75ZM7 5.75C7.2137 5.75 7.42326 5.76571 7.6277 5.79593L7.84703 4.31205C7.57021 4.27114 7.28734 4.25 7 4.25V5.75ZM12 1.25C9.68949 1.25 7.72942 2.7421 7.02709 4.81312L8.44763 5.29486C8.94981 3.81402 10.3516 2.75 12 2.75V1.25ZM7.02709 4.81312C6.84722 5.34352 6.75 5.91118 6.75 6.5H8.25C8.25 6.07715 8.3197 5.67212 8.44763 5.29486L7.02709 4.81312ZM17 4.25C16.7127 4.25 16.4298 4.27114 16.153 4.31205L16.3723 5.79593C16.5767 5.76571 16.7863 5.75 17 5.75V4.25ZM12 2.75C13.6484 2.75 15.0502 3.81402 15.5524 5.29486L16.9729 4.81312C16.2706 2.7421 14.3105 1.25 12 1.25V2.75ZM15.5524 5.29486C15.6803 5.67212 15.75 6.07715 15.75 6.5H17.25C17.25 5.91118 17.1528 5.34352 16.9729 4.81312L15.5524 5.29486ZM5.75 18V14.584H4.25V18H5.75ZM5.30028 13.8967C3.79769 13.2402 2.75 11.7416 2.75 10H1.25C1.25 12.359 2.6705 14.3846 4.69972 15.2712L5.30028 13.8967ZM18.25 14.584L18.25 18H19.75L19.75 14.584H18.25ZM21.25 10C21.25 11.7416 20.2023 13.2402 18.6997 13.8967L19.3003 15.2712C21.3295 14.3846 22.75 12.359 22.75 10H21.25ZM15.75 6.5V7H17.25V6.5H15.75ZM6.75 6.5V7H8.25V6.5H6.75ZM15 21.25H14V22.75H15V21.25ZM10 21.25H9V22.75H10V21.25Z"/> 
+                            <path d="M5 18H13M19 18H17" stroke="#155dfc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                `;
+            }
+
             nuevaFila.innerHTML = `
-                <td class="text-center px-2 py-1 font-semibold wrap-break-word">1</td>
-                <td class="text-center px-2 py-1 font-semibold wrap-break-word">${nombre}</td>
-                <td class="text-center px-2 py-1 wrap-break-word">
-                    <input type="number" ${maxAttr} min="1" value="1" class="cantidad w-14 text-center border rounded" />
+                <td class="text-center py-1 font-semibold wrap-break-word">1</td>
+                <td class="text-center py-1 font-semibold wrap-break-word">${nombre}</td>
+                <td class="text-center py-1 wrap-break-word">
+                    <input type="number" ${maxAttr} min="1" value="1" class="cantidad w-10 text-center border rounded" />
                 </td>
                 <td class="text-center m-auto wrap-break-word">
-                    C$<input type="number" min="1" value="${precio}" class="precio w-20 text-center border rounded" />
+                    C$<input type="number" min="1" value="${precio.toFixed(2)}" class="precio w-18 text-center border rounded" />
                 </td>
-                <td class="text-center px-2 py-1 subtotal font-semibold wrap-break-word p-2">C$ ${precio}</td>
-                <td class="text-center px-2 py-1 wrap-break-word">
-                    <button class="text-red-600 hover:text-red-800 eliminar-item p-2 rounded-lg hover:bg-gray-200">
+                <td class="text-center py-1 subtotal font-semibold wrap-break-word">C$ ${precio.toFixed(2)}</td>
+                <td class="text-center py-1 wrap-break-word">
+
+                    ${botonExtra}
+                    <button class="text-red-600 hover:text-red-800 cursor-pointereliminar-item p-1 rounded-lg hover:bg-gray-200" data-id="${id}" data-tipo="${tipo}" data-cuenta="${cuentaSeleccionada.dataset.id}">
                         <svg fill="none" viewBox="0 0 24 24"
                             stroke-width="1.5" stroke="currentColor" class="size-6 text-red-500">
                             <path stroke-linecap="round" stroke-linejoin="round" 
@@ -158,21 +173,75 @@ document.addEventListener("DOMContentLoaded", function () {
                 `;
             tbody.appendChild(nuevaFila);
 
-            const botonEliminar = nuevaFila.querySelector('.eliminar-item');
-            botonEliminar.addEventListener('click', () => {
-                // Añadir clases para la transición
-                nuevaFila.classList.add('transition-opacity', 'duration-300', 'opacity-0');
-
-                // Esperar a que termine la animación y luego eliminar el elemento
-                setTimeout(() => {
-                    nuevaFila.remove();
-                    actualizarTotal(); // si tienes lógica para actualizar el total
-                }, 500); // igual a duration-300 (300ms)
-            });
+            
         }
-
         actualizarTotal();
 
+    });
+
+    // Delegación de eventos para botones eliminar (esto se pone fuera del listener principal)
+    document.addEventListener('click', async function (e) {
+        const eliminarBtn = e.target.closest('.eliminar-item');
+        if (!eliminarBtn) return;
+
+        const fila = eliminarBtn.closest('tr');
+        if (fila) {
+            fila.classList.add('transition-opacity', 'duration-300', 'opacity-0');
+            setTimeout(async () => {
+                fila.remove();
+                const response = await fetch('/eliminar_detalle_cuenta/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({
+                        id: eliminarBtn.dataset.id,
+                        tipo: eliminarBtn.dataset.tipo,
+                        cuenta: eliminarBtn.dataset.cuenta
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error("Error al eliminar el detalle");
+                }
+
+                actualizarTotal();
+
+            }, 300); // espera 300ms para animación
+        }
+    });
+
+    document.addEventListener('click', async function (e) {
+        const eliminarCuentaBtn = e.target.closest('.eliminar-cuenta');
+        if (!eliminarCuentaBtn) return;
+
+        console.log(eliminarCuentaBtn);
+        const cuentaId = eliminarCuentaBtn.dataset.id;
+        const cuenta = eliminarCuentaBtn.closest('.cuenta');
+        console.log(cuentaId);
+        
+        if (cuenta) {
+            cuenta.classList.add('transition-opacity', 'duration-300', 'opacity-0');
+            setTimeout(async () => {
+                cuenta.remove();
+                const response = await fetch('/eliminar_cuenta_temporal/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({
+                        id: cuentaId
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error("Error al eliminar la cuenta");
+                }
+
+            }, 300); // espera 300ms para animación
+        }
     });
 
     document.addEventListener('click', function (e) {
@@ -200,49 +269,69 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 
+    document.querySelectorAll('.btn-guardar').forEach(boton => {
+        boton.addEventListener('click', function () {
+            const cuenta = this.closest('.cuenta');
+            cuentaSeleccionada = cuenta;  // ✅ Seleccionamos esta cuenta
+            guardarFactura();             // ✅ Guardamos esta cuenta
+        });
+    });
+
 });
 
-// function actualizarTotal() {
-//     let total = 0;
-//     const filas = document.querySelectorAll('#cuerpo-factura tr');
 
-//     filas.forEach(fila => {
-//         const cantidadInput = fila.querySelector('.cantidad');
-//         const precioInput = fila.querySelector('.precio');
-
-//         const cantidad = cantidadInput ? parseFloat(cantidadInput.value) || 0 : 0;
-//         const precio = precioInput ? parseFloat(precioInput.value) || 0 : 0;
-
-//         total += cantidad * precio;
-//     });
-
-//     const totalFinal = document.getElementById('total-final');
-//     if (totalFinal) {
-//         totalFinal.textContent = `C$${total.toFixed(2)}`;
-//     }
-// }
-
-
-function actualizarTotal() {
+async function actualizarTotal() {
     if (!cuentaSeleccionada) return;
 
     const filas = cuentaSeleccionada.querySelectorAll('.cuerpo-factura tr');
     let total = 0;
 
+    const detalles = [];
+
     filas.forEach(fila => {
         const cantidadInput = fila.querySelector('.cantidad');
         const precioInput = fila.querySelector('.precio');
+
         const cantidad = cantidadInput ? parseFloat(cantidadInput.value) || 0 : 0;
         const precio = precioInput ? parseFloat(precioInput.value) || 0 : 0;
+
         total += cantidad * precio;
+
+        const platoId = fila.dataset.plato;
+        const productoId = fila.dataset.producto;
+
+        detalles.push({
+            tipo: platoId ? 'plato' : 'producto',
+            id: platoId || productoId,
+            cantidad: cantidad,
+            precio: precio
+        });
     });
 
     const totalFinal = cuentaSeleccionada.querySelector('.total-final');
     if (totalFinal) {
         totalFinal.textContent = `C$${total.toFixed(2)}`;
     }
-}
 
+    const cuentaId = cuentaSeleccionada.dataset.id;
+
+    // Llamar a la API para guardar los detalles
+    try {
+        await fetch('/actualizar_cuenta_temporal/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken') // si usas CSRF en Django
+            },
+            body: JSON.stringify({
+                cuentaId: cuentaId,
+                detalles: detalles
+            })
+        });
+    } catch (error) {
+        console.error('Error al guardar la cuenta temporal:', error);
+    }
+}
 
 
 function buscarProductos(query) {
@@ -268,7 +357,6 @@ function buscarProductos(query) {
                 }, index * 100);
             });
         })
-
 }
 
 function crearProducto(producto) {
@@ -359,7 +447,179 @@ function handleTipoPago() {
         nuevoInput.className = 'p-2 dark:bg-secondary-900 bg-gray-300 outline-none rounded-lg w-24 mr-1';
         container.appendChild(nuevoInput);
     } else if (tipo == '4') {
-        efectivo.style.display = 'none';
+        efectivo.placeholder = 'Referencia';
         efectivo.value = '';
     }
+}
+
+
+async function guardarFactura() {
+    if (!cuentaSeleccionada) {
+        Swal.fire({ icon: 'warning', title: 'Selecciona una cuenta' });
+        return;
+    }
+
+    console.log("Cuenta seleccionada:", cuentaSeleccionada.dataset.id);
+
+    const filas = cuentaSeleccionada.querySelectorAll('.cuerpo-factura tr');
+    const productos = [];
+
+    let hayError = false;
+    let stockError = false;
+    let tasaCambio = 0;
+
+    try {
+        const response = await fetch('/api/tasa-cambio/');
+        const data = await response.json();
+
+        if (data.tasaCambio != null && data.tasaCambio !== undefined) {
+            tasaCambio = data.tasaCambio;
+        } else {
+            Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo obtener la tasa de cambio.' });
+            return;
+        }
+    } catch (error) {
+        Swal.fire({ icon: 'error', title: 'Error', text: 'Error al obtener la tasa de cambio.' });
+        return;
+    }
+
+    filas.forEach(fila => {
+        const tipo = fila.getAttribute('data-tipo');
+        const cantidad = parseFloat(fila.querySelector('.cantidad')?.value || 0);
+        const precio = parseFloat(fila.querySelector('.precio')?.value || 0);
+
+        if (tipo === 'producto') {
+            const stock = parseInt(fila.dataset.stock);
+            console.log(`Producto: ${fila.getAttribute('data-nombre')}, Cantidad: ${cantidad}, Stock: ${stock}`);
+            if (cantidad > stock) {
+                stockError = true;
+                return;
+            }
+        }
+
+        if (isNaN(cantidad) || isNaN(precio) || cantidad <= 0 || precio <= 0) {
+            hayError = true;
+            return;
+        }
+
+        productos.push({
+            id: parseInt(fila.getAttribute('data-id')),
+            nombre: fila.getAttribute('data-nombre'),
+            cantidad: cantidad,
+            precio: precio,
+            tipo: tipo
+        });
+    });
+
+    if (stockError) {
+        Swal.fire({ icon: 'warning', title: 'Stock insuficiente' });
+        return;
+    }
+
+    if (productos.length === 0) {
+        Swal.fire({ icon: 'warning', title: 'Agrega productos a la factura' });
+        return;
+    }
+
+    if (hayError) {
+        Swal.fire({ icon: 'error', title: 'Error', text: 'Revisa los campos de cantidad y precio.' });
+        return;
+    }
+
+    // ✅ Usar los valores desde la cuenta seleccionada
+    const totalTexto = cuentaSeleccionada.querySelector('.total-final').textContent.trim();
+    const total = parseFloat(totalTexto.replace("C$", "").replace(",", ""));
+
+    let cliente = cuentaSeleccionada.querySelector('.nombre-cliente').value.trim();
+    if (!cliente) cliente = 'Generico';
+
+    const tipoPago = cuentaSeleccionada.querySelector('.tipo').value;
+    let efectivoCordoba = 0;
+    let efectivoDolar = 0;
+    let cambio = 0;
+
+    const efectivoInput = cuentaSeleccionada.querySelector('.efectivo');
+    const efectivoMixtoInput = cuentaSeleccionada.querySelector('#efectivo-mixto');
+
+    if (tipoPago === '1') {
+        efectivoCordoba = parseFloat(efectivoInput?.value || 0);
+        if (efectivoCordoba === 0) {
+            efectivoCordoba = total;
+        } else if (efectivoCordoba < total) {
+            Swal.fire({ icon: 'error', title: 'Error', text: 'Monto insuficiente en córdobas' });
+            return;
+        }
+        cambio = efectivoCordoba - total;
+    } else if (tipoPago === '2') {
+        efectivoDolar = parseFloat(efectivoInput?.value || 0);
+        const totalEnCordoba = efectivoDolar * tasaCambio;
+        if (efectivoDolar === 0 || totalEnCordoba < total) {
+            Swal.fire({ icon: 'error', title: 'Error', text: 'Monto insuficiente en dólares' });
+            return;
+        }
+        cambio = totalEnCordoba - total;
+    } else if (tipoPago === '3') {
+        efectivoCordoba = parseFloat(efectivoInput?.value || 0);
+        efectivoDolar = parseFloat(efectivoMixtoInput?.value || 0);
+        const totalEnCordoba = efectivoCordoba + (efectivoDolar * tasaCambio);
+        if (efectivoCordoba === 0 || efectivoDolar === 0 || totalEnCordoba < total) {
+            Swal.fire({ icon: 'error', title: 'Error', text: 'Monto insuficiente' });
+            return;
+        }
+        cambio = totalEnCordoba - total;
+    } else if (tipoPago === '4') {
+        efectivoCordoba = efectivoInput?.value.trim();
+        if (!efectivoCordoba) {
+            Swal.fire({ icon: 'error', title: 'Error', text: 'Ingrese el numero de referencia' });
+            return;
+        }   
+        cambio = 0;
+    }
+
+    const datos = {
+        productos,
+        total,
+        cliente,
+        tipoPago,
+        efectivo_cordoba: efectivoCordoba,
+        efectivo_dolar: efectivoDolar,
+        cuenta_id: cuentaSeleccionada.dataset.id
+    };
+
+    console.log("Datos a enviar:", datos);
+
+    fetch('/guardar-factura-unica/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'  // Asegúrate de que esté correctamente insertado por tu backend (Django, etc)
+        },
+        body: JSON.stringify(datos)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Factura guardada correctamente',
+                text: `Cambio: C$ ${cambio.toFixed(2)}`
+            }).then(() => {
+                console.log("Factura guardada exitosamente:", typeof(data.CerrarMesa));
+                if (data.CerrarMesa == 1) {
+
+                    window.location.href = window.location.origin + '/mesas/listar/';
+
+                }
+                else {
+                    window.location.reload();
+                }
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al guardar',
+                text: data.message || 'Error al guardar la factura.'
+            });
+        }
+    });
 }

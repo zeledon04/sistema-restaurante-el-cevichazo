@@ -13,7 +13,7 @@ urlpatterns = [
     #urls para cajas
     path('verificar_caja/', cajas.verificar_caja, name='verificar_caja'),
     path('abrir_caja/', cajas.abrir_caja, name='abrir_caja'),
-    # path('cerrar_caja/', cajas.cerrar_caja, name='cerrar_caja'),
+    path('cerrar_caja/', cajas.cerrar_caja, name='cerrar_caja'),
     path('Cajas/listarCajas', cajas.listarCajas, name='listar_cajas'),
     # path('Cajas/detalleCaja/<int:cajaid>', cajas.detalleCaja, name='detalleCaja'),
 
@@ -25,6 +25,11 @@ urlpatterns = [
     #urls para cuentas
     path('cuentas/agregarCuentas/<int:id>', cuentas.agregarCuentas, name='agregar_cuentas'),
     path('cuentas/crearCuenta/', cuentas.crear_cuenta_temporal, name='crear_cuenta_temporal'),
+    path('actualizar_cuenta_temporal/', cuentas.actualizar_cuenta_temporal, name='actualizar_cuenta_temporal'),
+    path('eliminar_detalle_cuenta/', cuentas.eliminar_detalle_cuenta, name='eliminar_detalle_cuenta'),
+    path('eliminar_cuenta_temporal/', cuentas.eliminar_cuenta_temporal, name='eliminar_cuenta_temporal'),
+    path('imprimir-precuenta/', cuentas.imprimir_precuenta, name='imprimir_precuenta'),
+
 
     path('buscar_productos/', facts.buscar_productos, name='buscar_productos'),
     path('cuentas/facturaUnica/', facts.nueva_Factura_Unica, name='nuevaFacturaUnica'),

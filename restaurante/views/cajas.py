@@ -16,6 +16,7 @@ from django.core.paginator import Paginator
 from datetime import  datetime
 from django.http import JsonResponse
 from django.utils.timezone import now
+from django.utils import timezone
 
 from ..view import datosUser
 
@@ -79,9 +80,12 @@ def listarCajas(request):
     user_data = datosUser(request)
     return render(request, 'pages/cajas/listarCajas.html', user_data)
 
-"""
+@transaction.atomic
 @login_required
 def cerrar_caja(request):
+    data = json.loads(request.body)
+    billetes = data.get('billetes', [])
+    print(billetes)
     if request.method == 'POST':
         caja = Cajas.objects.filter(usuarioid=request.session['user_id'], estado=1).first()
         if not caja:
@@ -105,6 +109,7 @@ def cerrar_caja(request):
                     tipomovimiento=2,  # Cierre
                     estado=1
                 )
+            print("Billetes guardados:", billetes)
 
             # Obtener tasa de cambio
             tasa = Opciones.objects.first()
@@ -112,20 +117,30 @@ def cerrar_caja(request):
 
             # Calcular ingresos por facturas
             totalingresos = Decimal('0')
+            
             facturas = Facturas.objects.filter(cajaid=caja.cajaid, usuarioid=request.session['user_id'], estado=1)
-
+            print("Facturas encontradas:", facturas.count())
+            print("Lista IDs:", list(facturas.values_list('facturaid', flat=True)))
             for factura in facturas:
-                subtotal_productos = Detallefacturas.objects.filter(facturaid=factura, estado=1).aggregate(
-                    total=Sum(ExpressionWrapper(F('precio') * F('cantidad'), output_field=FloatField()))
+                print("Factura ID:", factura.facturaid)
+                
+                subtotal_productos = Detallefacturaproducto.objects.filter(facturaid=factura, estado=1).aggregate(
+                    total=Sum(ExpressionWrapper(F('preciounitario') * F('cantidad'), output_field=FloatField()))
                 )['total'] or 0
 
-                subtotal_ropa = Detallefacturasropa.objects.filter(facturaid=factura, estado=1).aggregate(
-                    total=Sum(ExpressionWrapper(F('precio') * F('cantidad'), output_field=FloatField()))
+                subtotal_platos = Detallefacturaplato.objects.filter(facturaid=factura, estado=1).aggregate(
+                    total=Sum(ExpressionWrapper(F('preciounitario') * F('cantidad'), output_field=FloatField()))
                 )['total'] or 0
+                
+                print("Factura:", factura.facturaid)
+                print("Subtotal productos:", subtotal_productos)
+                print("Subtotal platos:", subtotal_platos)
+                print("---------")
 
-                total_factura = Decimal(subtotal_productos) + Decimal(subtotal_ropa)
+
+                total_factura = Decimal(str(subtotal_productos)) + Decimal(str(subtotal_platos))
                 totalingresos += total_factura
-
+            print("#")
             # Actualizar datos de caja
             caja.estado = 0
             caja.cordobasfinal = total_cordobas
@@ -146,9 +161,11 @@ def cerrar_caja(request):
                 caja.sobrante = 0
                 caja.faltante = 0
 
-            caja.fechaciere = now()
+            caja.fechaciere = timezone.now()
             caja.save()
-
+            
+            
+            print("Cerrando caja:", caja.cajaid)
             return JsonResponse({'success': True})
 
         except Exception as e:
@@ -156,7 +173,7 @@ def cerrar_caja(request):
 
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
-
+"""
 @admin_required
 def listarCajas(request):
     user_data = datosUser(request)

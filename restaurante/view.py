@@ -19,14 +19,24 @@ from .utils import login_required, logout_required, admin_required, vendedor_req
     #     user=user,
     #     contra=contra_cifrada,
     #     rol=rol
-    # )
+    # 
+    
+def respaldo_ceheck():
+    from django.utils import timezone
+    opc = Opciones.objects.first()
+    if opc and opc.fechaRespaldo:
+        fecha_respaldo = opc.fechaRespaldo
+        dias = (timezone.now().date() - fecha_respaldo.date()).days
+        if dias > 7:
+            return True
+    return False
 
 
 def datosUser(request):
     user = Usuarios.objects.get(pk=request.session['user_id'])
     # notisStock = notificar_stock_bajo()
     # notisVencimiento = notificar_vencimientos()
-    
+
     return {
         'user': user,
         'nombre': user.nombre,

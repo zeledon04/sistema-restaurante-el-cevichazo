@@ -64,8 +64,10 @@ document.addEventListener("DOMContentLoaded", () => {
                             .then(res => res.json())
                             .then(data => {
                                 if (data.message) {
-                                    Swal.fire('Éxito', data.message, 'success');
-                                    window.location.reload(); // Recargar la página para ver la nueva mesa
+                                    Swal.fire('Éxito', data.message, 'success')
+                                    .then(() => {
+                                        window.location.reload();
+                                    }); // Recargar la página para ver la nueva mesa
                                 } else {
                                     Swal.fire('Error', data.error || 'No se pudo agregar la mesa', 'error');
                                 }

@@ -61,6 +61,12 @@ def agregarLote(request, id):
         else:
             producto.precio = precioventa
             
+        if Lotesproductos.objects.filter(productoid=producto, estado=1).exists():
+            pass
+        else:
+            producto.precio = precioventa
+            estado = 1
+            
         lote = Lotesproductos(
             fechaingreso=datetime.today().date(),
             fechavencimiento=fechavencimiento,
