@@ -16,6 +16,7 @@ def opciones(request):
         telefono = request.POST.get('telefono')
         mensaje = request.POST.get('mensaje')
         numeroruc = request.POST.get('numeroruc')
+        nombreImpresora = request.POST.get('nombreImpresora')
         
         if tasa:
             try:
@@ -31,6 +32,7 @@ def opciones(request):
         opc.telefono = telefono
         opc.mensaje = mensaje
         opc.numeroruc = numeroruc
+        opc.nombreimpresora = nombreImpresora
         opc.save()
         messages.success(request, "Configuración actualizada correctamente!")    
     return render(request, 'pages/opciones/opciones.html', datos)

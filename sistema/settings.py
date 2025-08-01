@@ -136,7 +136,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     # BASE_DIR / "theme/static",
     os.path.join(BASE_DIR, "restaurante", "static"),
-    # os.path.join(os.environ.get('LOCALAPPDATA'), 'Restaurante', 'media'),
+    os.path.join(os.environ.get('LOCALAPPDATA'), 'Restaurante', 'media'),
 ]
 
 # Default primary key field type

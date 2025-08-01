@@ -153,9 +153,9 @@ function actualizarVistaCocina(data) {
                     "Content-Type": "application/json",
                     "X-CSRFToken": getCookie("csrftoken"),
                 },
-                body: JSON.stringify({ estado: nuevoEstado })
+                body: JSON.stringify({ estado: nuevoEstado }),
+                
             });
-
             // Ya que el polling actualiza cada 0.5s, no necesitas esto,
             // pero si quieres forzar la actualización inmediata:
             fetch('/cocina/estado/')

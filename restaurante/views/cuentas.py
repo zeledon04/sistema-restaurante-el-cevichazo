@@ -1,14 +1,16 @@
 import json
 from django.http import JsonResponse
 from django.shortcuts import render
-from restaurante.models import Cuentastemporales, Detallecuentatemporalplato, Detallecuentatemporalproducto, Mesas, Opciones, Productos, Platos
+from restaurante.models import Cuentastemporales, Detallecuentatemporalplato, Detallecuentatemporalproducto, Mesas, Productos, Platos
 from ..view import datosUser
 from django.views.decorators.csrf import csrf_exempt
 from django.db import transaction
 from django.utils import timezone
 
 from collections import defaultdict
+from ..utils import login_required
 
+@login_required
 def agregarCuentas(request, id):
     user_data = datosUser(request)
     
@@ -24,7 +26,6 @@ def agregarCuentas(request, id):
 
         detalles_por_cuenta[cuenta.cuentatemporalid]['productos'] = detalles_producto
         detalles_por_cuenta[cuenta.cuentatemporalid]['platos'] = detalles_plato
-
     
     totales_por_cuenta = {}
 
@@ -33,10 +34,9 @@ def agregarCuentas(request, id):
         detalles = detalles_por_cuenta.get(cuenta_id, {'platos': [], 'productos': []})
 
         total = 0
-        # Suma platos
         for plato in detalles['platos']:
             total += plato.cantidad * plato.platoid.precio
-        # Suma productos
+
         for producto in detalles['productos']:
             total += producto.cantidad * producto.productoid.precio
 
@@ -51,13 +51,9 @@ def agregarCuentas(request, id):
         'totales_por_cuenta': totales_por_cuenta,
     }
         
-        
-        
-        
     return render(request, 'pages/cuentas/agregarCuentas.html', datos)
 
-
-
+@login_required
 @csrf_exempt
 @transaction.atomic
 def crear_cuenta_temporal(request):
@@ -77,13 +73,13 @@ def crear_cuenta_temporal(request):
         return JsonResponse({"success": True, "cuenta_id": cuenta.cuentatemporalid})
     return JsonResponse({"success": False}, status=400)
 
-
+@login_required
 @csrf_exempt
 @transaction.atomic
 def actualizar_cuenta_temporal(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        print(f"Datos recibidos para actualizar cuenta temporal: {data}")
+
         cuenta_id = data.get('cuentaId')
         detalles = data.get('detalles', [])
         
@@ -93,7 +89,7 @@ def actualizar_cuenta_temporal(request):
         for item in detalles:
             tipo = item.get('tipo')
             item_id = item.get('id')
-            # print(f"Actualizando cuenta temporal: {cuenta_id}, detalles: {detalles}")
+
             cantidad = item.get('cantidad')
 
             if tipo == 'plato':
@@ -127,6 +123,7 @@ def actualizar_cuenta_temporal(request):
     
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
+@login_required
 def eliminar_detalle_cuenta(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -143,6 +140,7 @@ def eliminar_detalle_cuenta(request):
 
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
+@login_required
 def eliminar_cuenta_temporal(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -150,6 +148,12 @@ def eliminar_cuenta_temporal(request):
 
         try:
             cuenta = Cuentastemporales.objects.get(cuentatemporalid=id)
+            cuentas = Cuentastemporales.objects.filter(mesaid_id=cuenta.mesaid_id, estado=1).count()
+            if cuentas == 1:
+                mesa = Mesas.objects.filter(mesaid=cuenta.mesaid_id).first()
+                mesa.estado = 0
+                mesa.save()
+                return JsonResponse({'success': True, 'message': '1'})
             cuenta.delete()
             return JsonResponse({'success': True})
         except Cuentastemporales.DoesNotExist:
@@ -157,9 +161,9 @@ def eliminar_cuenta_temporal(request):
 
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
-
 from escpos.printer import Win32Raw
 
+@login_required
 @csrf_exempt
 def imprimir_precuenta(request):
     if request.method == "POST":
@@ -168,34 +172,25 @@ def imprimir_precuenta(request):
             platos = datos.get("platos", [])
             total = float(datos.get("total"))  # Puedes enviar esto desde el frontend
             printer = Win32Raw("POS")
-            print(platos)
             # Encabezado
             printer.set(align='center', width=2, height=2)
             printer.text("\nPRE-CUENTA\n")
             printer.set(align='left')
             printer.text("--------------------------------\n")
-            
             printer.text("Items     Uds    Precio     SubT\n")
-            
-            print("entra")
 
             def formato_linea(nombre, cantidad, precio, subtotal):
                 linea1 = nombre[:32]
             
                 linea2 = f"{str(cantidad).rjust(2)}   C${precio:.2f}  C${subtotal:.2f}".rjust(32)
                 return linea1 + "\n" + linea2
-            print("entra2")
             # Platos
             for item in platos:
                 nombre = item.get("nombre")
                 cantidad = int(item.get("cantidad"))
                 precio = float(item.get("precio"))
                 subtotal = float(item.get("subtotal"))
-                print(f"Imprimiendo plato: {nombre}, Cantidad: {cantidad}, Precio: {precio}, Subtotal: {subtotal}")
-                
                 printer.text(formato_linea(nombre, cantidad, precio, subtotal) + "\n")
-                
-            print("tenrmia")
 
             printer.text("--------------------------------\n")
             total_line = f"Total:{f'C${total:.2f}'.rjust(26)}"

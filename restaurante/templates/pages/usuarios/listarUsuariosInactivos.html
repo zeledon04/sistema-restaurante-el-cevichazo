@@ -1,0 +1,84 @@
+{% extends "../../base.html" %}
+{% comment %} {% load static %} {% endcomment %}
+{% block title %}Listar Usuarios Inactivos{% endblock %}
+{% block content %}
+{% load static %}
+<div class="p-8 rounded-xl shadow-2xl h-[95%] border border-gray-300">
+    <h1 class='text-xl text-gray-600 font-bold'> Catálogo de Usuarios Inactivos</h1>
+    <hr class='my-6 border-gray-500/30' />
+
+    <div class='flex justify-between items-center mb-5 gap-2'>
+        <input type="text"
+          id="searchTerm"
+          onkeyup="doSearch()"
+          placeholder='Search by name...'
+          value=""
+          class='p-2 bg-gray-300 outline-none rounded-lg w-[36%]'
+          onChange=""
+        />
+
+      </div>
+
+    <div class="rounded-tr-lg rounded-tl-lg overflow-y-scroll h-[60vh]">
+        <table id="datos" class="w-full table-fixed border-collapse mb-5 rounded-lg">
+            <thead class="p-3 border border-t-0 border-l-0 border-r-0 border-b-gray-200">
+                <tr class="">
+                    <th class="p-2">#</th>
+                    <th class="p-2">Nombre</th>
+                    <th class="p-2">Rol</th>
+                    <th class="p-2">Usuario</th>
+                    <th class="p-2">Contraseña</th>
+                    <th class="p-2">Teléfono</th>
+                    <th class="p-2">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="p-2 rounded-lg w-full">
+                {% for usuario in usuarios %}
+                <tr class="hover:bg-gray-200 rounded-lg transition-colors">
+                    <td class="hidden p-3 text-center">{{ usuario.usuarioid }}</td> <!-- Esto es para que no se muestre el código de barras en la tabla pero que si esté presente al buscar-->
+                    <td class="p-3 text-center">{{ forloop.counter }}</td>
+                    <td class="p-3 text-center">{{ usuario.nombre }}</td>
+                    <td class="p-3 text-center">
+                        {% if usuario.rol == 1 %}
+                        Administrador
+                        {% elif usuario.rol == 2 %}
+                        Cajero
+                        {% else %}
+                        Desconocido
+                        {% endif %}
+                    </td>
+                    <td class="p-3 text-center">{{ usuario.user }}</td>
+                    <td class="p-3 text-center overflow-x-auto">{{ usuario.contra }}</td>
+                    <td class="p-3 text-center">{{ usuario.telefono }}</td>
+                    <td class="p-3 text-center">
+                        <div class="grid gap-2 w-full place-content-center ">
+
+                            <!-- tus botones aquí  -->
+                            <a href="#" onclick="activarUsuario({{ usuario.usuarioid }})" class="btn w-full" alt="Activar Categoría">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-11 rounded-lg text-amber-300 hover:bg-gray-300 p-2  w-full">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                                </svg>
+
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}           
+            </tbody>
+        </table>
+
+        <hr class='my-8 mx-10 border-gray-500/30' />
+
+        <div class='flex justify-end gap-4 mx-10'>
+            <a href="{% url 'listar_usuarios' %}" class='bg-red-500 text-white py-2 cursor-pointer px-4 rounded-lg hover:bg-red-600 transition-colors'>Cancelar</a>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static "js/activar.js" %}"></script>
+<script src="{% static "js/search.js" %}"></script>
+{% endblock %}

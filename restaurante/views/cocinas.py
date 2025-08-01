@@ -1,19 +1,14 @@
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from ..models import Mesas, Cocinas, Platos
+from django.shortcuts import render
+from ..models import Mesas, Cocinas
 from django.http import JsonResponse
 from ..view import datosUser
 from django.views.decorators.csrf import csrf_exempt
 from ..utils import login_required
-from datetime import datetime, date
 from django.utils import timezone
 from django.templatetags.static import static
 from django.utils.dateformat import format
-
 import json
 
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
 
 @login_required
 def listarCocinas(request):
@@ -60,8 +55,6 @@ def cambiar_estado_cocina(request, cocina_id):
     if request.method == "POST":
         data = json.loads(request.body)
         nuevo_estado = data.get("estado")
-        print(f"Cambiando estado de cocina {cocina_id} a {nuevo_estado}")
-
         cocina = Cocinas.objects.get(pk=cocina_id)
         cocina.estado = nuevo_estado
 
@@ -77,7 +70,6 @@ def cambiar_estado_cocina(request, cocina_id):
 def enviar_a_cocina(request):
     body = json.loads(request.body)
     front = body.get("front")
-    print("Front value:", front)
     numeroMesa = body.get("mesaId")
     nombreCliente = body.get("nombreCliente")
     platoId = body.get("platoId")
@@ -101,6 +93,5 @@ def enviar_a_cocina(request):
         cocinas.save()
         return JsonResponse({"status": "success"})
     except Exception as e:
-        print(f"Error al enviar a cocina: {e}")
         return JsonResponse({"status": "error"})
     

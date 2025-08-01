@@ -14,7 +14,11 @@
         </div>
 
         <div class="flex items-center justify-center p-2 text-gray-500">
+            {% if mesas_ocupadas %}
+            <h1 class='text-5xl font-bold'>{{ mesas_ocupadas }}</h1>
+            {% else %}
             <h1 class='text-5xl font-bold'>0</h1>
+            {% endif %}
         </div>
 
     </div>

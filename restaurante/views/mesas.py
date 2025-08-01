@@ -7,8 +7,9 @@ from django.utils import timezone
 
 from restaurante.models import Cuentastemporales, Mesas, Usuarios
 from ..view import datosUser
-
+from ..utils import login_required
 # Create your views here.
+@login_required
 def listarMesas(request):
     user_data = datosUser(request)
 
@@ -44,7 +45,8 @@ def listarMesas(request):
         'mesas': mesas,
         'numMesas': cont
     })
-
+    
+@login_required
 @transaction.atomic
 def agregarMesa(request):
     if request.method == 'POST':

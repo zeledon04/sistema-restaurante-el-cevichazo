@@ -183,7 +183,10 @@ document.getElementById("btnCerrarCaja").addEventListener("click", function () {
                                     window.location.href = '/dashboard';
                                 });
                             } else {
-                                Swal.fire('Error al cerrar la caja');
+                                Swal.fire({
+                                    title: data.message,
+                                    icon: 'error',
+                                });
                             }
                         });
                     }

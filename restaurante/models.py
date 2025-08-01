@@ -73,6 +73,7 @@ class Detallefacturaproducto(models.Model):
     cantidad = models.IntegerField()
     preciounitario = models.FloatField(db_column='precioUnitario')  # Field name made lowercase.
     estado = models.TextField(blank=True, null=True)  # This field type is a guess.
+    preciocompra = models.FloatField()
     class Meta:
         managed = False
         db_table = 'detalleFacturaProducto'
@@ -147,7 +148,8 @@ class Platos(models.Model):
     updated_at = models.DateTimeField(blank=True, null=True)
     estado = models.IntegerField(blank=True, null=True)
     categoriaid = models.ForeignKey(Categoriasproducto, models.DO_NOTHING, db_column='categoriaId', blank=True)  # Field name made lowercase.
-
+    tiempo = models.TextField(blank=True, null=True)  # This field type is a guess.
+    
     class Meta:
         managed = False
         db_table = 'platos'
@@ -175,6 +177,8 @@ class Usuarios(models.Model):
     rol = models.IntegerField()
     user = models.TextField()
     contra = models.TextField()
+    telefono = models.TextField(blank=True, null=True)
+    estado = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -221,6 +225,7 @@ class Opciones(models.Model):
     telefono = models.TextField(blank=True, null=True)
     mensaje = models.TextField(blank=True, null=True)
     numeroruc = models.TextField(db_column='numeroRUC', blank=True, null=True)  # Field name made lowercase.
+    nombreimpresora = models.TextField(db_column='nombreImpresora', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False

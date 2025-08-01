@@ -1,0 +1,152 @@
+{% extends "../../base.html" %}
+{% block title %}Historial Facturas{% endblock %}
+{% load static %}
+{% block content %}
+<div class="p-5 rounded-xl shadow-2xl border border-gray-300 h-[98%] flex flex-col">
+
+    <div class='flex justify-between items-center mb-5'>
+        
+        <h1 class='text-3xl text-gray-600 font-bold'>Detalles Caja</h1>
+        <a href="{% url 'listar_cajas' %}" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-lg shadow transition-colors">
+        Volver
+    </a>
+        
+    </div>
+
+    <hr class=' border-gray-500/30 mb-5' />
+
+    <div class="rounded-tr-lg rounded-tl-lg overflow-y-auto flex-1 min-h-0">
+
+        <!-- Apertura -->
+        <h2 class="text-2xl font-semibold text-gray-700 mb-5">🟢 Denominaciones - Apertura</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+            <!-- Córdobas -->
+            <div class="bg-gray-50 rounded-xl shadow-sm p-4 border border-gray-200">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">🇳🇮 Córdobas</h3>
+                <table class="w-full text-sm text-left text-gray-700">
+                    <thead class="bg-gray-100 text-gray-600">
+                        <tr>
+                            <th class="px-4 py-2">Valor</th>
+                            <th class="px-4 py-2">Cantidad</th>
+                            <th class="px-4 py-2">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for item in apertura_cordobas %}
+                        <tr>
+                            <td class="px-4 py-2">C${{ item.valor }}</td>
+                            <td class="px-4 py-2">{{ item.cantidad }}</td>
+                            <td class="px-4 py-2">C${{ item.subtotal|floatformat:2 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr class="font-bold bg-gray-100 border-t">
+                            <td colspan="2" class="px-4 py-2">Total</td>
+                            <td class="px-4 py-2 text-green-700">C${{ total_apertura_cordobas|floatformat:2 }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- Dólares -->
+            <div class="bg-gray-50 rounded-xl shadow-sm p-4 border border-gray-200">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">🇺🇸 Dólares</h3>
+                <table class="w-full text-sm text-left text-gray-700">
+                    <thead class="bg-gray-100 text-gray-600">
+                        <tr>
+                            <th class="px-4 py-2">Valor</th>
+                            <th class="px-4 py-2">Cantidad</th>
+                            <th class="px-4 py-2">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for item in apertura_dolares %}
+                        <tr>
+                            <td class="px-4 py-2">${{ item.valor }}</td>
+                            <td class="px-4 py-2">{{ item.cantidad }}</td>
+                            <td class="px-4 py-2">${{ item.subtotal|floatformat:2 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr class="font-bold bg-gray-100 border-t">
+                            <td colspan="2" class="px-4 py-2">Total</td>
+                            <td class="px-4 py-2 text-green-700">${{ total_apertura_dolares|floatformat:2 }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <!-- Cierre -->
+        <h2 class="text-2xl font-semibold text-gray-700 mb-5">🔴 Denominaciones - Cierre</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+            <!-- Córdobas -->
+            <div class="bg-gray-50 rounded-xl shadow-sm p-4 border border-gray-200">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">🇳🇮 Córdobas</h3>
+                <table class="w-full text-sm text-left text-gray-700">
+                    <thead class="bg-gray-100 text-gray-600">
+                        <tr>
+                            <th class="px-4 py-2">Valor</th>
+                            <th class="px-4 py-2">Cantidad</th>
+                            <th class="px-4 py-2">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for item in cierre_cordobas %}
+                        <tr>
+                            <td class="px-4 py-2">C${{ item.valor }}</td>
+                            <td class="px-4 py-2">{{ item.cantidad }}</td>
+                            <td class="px-4 py-2">C${{ item.subtotal|floatformat:2 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr class="font-bold bg-gray-100 border-t">
+                            <td colspan="2" class="px-4 py-2">Total</td>
+                            <td class="px-4 py-2 text-red-700">C${{ total_cierre_cordobas|floatformat:2 }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- Dólares -->
+            <div class="bg-gray-50 rounded-xl shadow-sm p-4 border border-gray-200">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">🇺🇸 Dólares</h3>
+                <table class="w-full text-sm text-left text-gray-700">
+                    <thead class="bg-gray-100 text-gray-600">
+                        <tr>
+                            <th class="px-4 py-2">Valor</th>
+                            <th class="px-4 py-2">Cantidad</th>
+                            <th class="px-4 py-2">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for item in cierre_dolares %}
+                        <tr>
+                            <td class="px-4 py-2">${{ item.valor }}</td>
+                            <td class="px-4 py-2">{{ item.cantidad }}</td>
+                            <td class="px-4 py-2">${{ item.subtotal|floatformat:2 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr class="font-bold bg-gray-100 border-t">
+                            <td colspan="2" class="px-4 py-2">Total</td>
+                            <td class="px-4 py-2 text-red-700">${{ total_cierre_dolares|floatformat:2 }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <hr class=' border-gray-500/30'/>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static "js/listarCajas.js" %}"></script>
+{% endblock %}

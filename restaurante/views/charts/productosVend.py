@@ -1,8 +1,6 @@
-# views.py
 from django.db.models import Sum
 from django.http import JsonResponse
 from ...models import Historialventas
-from django.db.models import Count
 from itertools import chain
 from django.db.models import F
 
@@ -40,8 +38,6 @@ def productos_mas_vendidos(request):
     for top in top_combinado:
         labels.append(top['nombre'])
         datos.append(top['total'])
-    print(labels)
-    print(datos)
     
     return JsonResponse({'labels':labels, 'datos': datos})
 

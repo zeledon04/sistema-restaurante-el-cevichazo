@@ -4,7 +4,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render
 
-from restaurante.models import Cajas, Cuentastemporales, Detallefacturaplato, Detallefacturaproducto, Facturas, Lotesproductos, Mesas, Opciones, Platos, Productos
+from restaurante.models import Cajas, Cuentastemporales, Detallefacturaplato, Detallefacturaproducto, Facturas, Historialventas, Lotesproductos, Mesas, Opciones, Platos, Productos
 from restaurante.views import lotes
 from ..view import datosUser
 from ..utils import login_required
@@ -14,6 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 
 
+@login_required
 def  nueva_Factura_Unica(request):
     user_data = datosUser(request)
     datos = {**user_data}
@@ -118,13 +119,21 @@ def guardar_Factura_Unica(request):
                 if tipo == 'producto':
                     
                     producto = Productos.objects.get(productoid=item['id'])
+                    lot = Lotesproductos.objects.filter(productoid=producto, estado=1).first()
                     
                     Detallefacturaproducto.objects.create(
                         facturaid=factura,
                         productoid=producto,
                         cantidad=cantidad,
                         preciounitario=precio,
-                        estado=1
+                        estado=1,
+                        preciocompra=lot.preciocompraunitario,
+                    )
+                    
+                    Historialventas.objects.create(
+                        productoid=producto,
+                        cantidadtotal=cantidad,
+                        fechaventa=timezone.now(),
                     )
                     restante = cantidad
                     acti = False
@@ -168,13 +177,16 @@ def guardar_Factura_Unica(request):
                         preciounitario=precio,
                         estado=1
                     )
+                    Historialventas.objects.create(
+                        platoid=plato,
+                        cantidadtotal=cantidad,
+                        fechaventa=timezone.now(),
+                    )
                     
-            print("imprimr")
             imprimir(factura.facturaid)        
             
             cerrar_mesa = None
             if cuentaSeleccionada:
-                print("Cuenta seleccionada:", cuentaSeleccionada)
                 cuentaSeleccionada = Cuentastemporales.objects.filter(cuentatemporalid=cuentaSeleccionada).first()
                 cuentaSeleccionada.estado = 0
                 cuentaSeleccionada.save()
@@ -209,7 +221,7 @@ from PIL import Image
 def imprimir(facturaid):
     try:
         printer = Win32Raw("POS")
-
+        
         factura = Facturas.objects.get(facturaid=facturaid)
         detalles_platos = Detallefacturaplato.objects.filter(facturaid=factura)
         detalles_productos = Detallefacturaproducto.objects.filter(facturaid=factura)
@@ -301,7 +313,6 @@ def imprimir(facturaid):
         printer.text("\n\n\n\n\n\n")
         printer.cashdraw(2)
         printer.close()  # Cerrar la impresora
-        print("Factura impresa exitosamente.")
 
     except Exception as e:
-        print(f"Error al imprimir la factura: {e}")
+        pass

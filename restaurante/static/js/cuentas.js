@@ -235,6 +235,14 @@ document.addEventListener("DOMContentLoaded", function () {
                         id: cuentaId
                     })
                 });
+                const data = await response.json();
+
+                if (data.message == 1) {
+                    window.location.href = '/mesas/listar/';  // Cambia esto por la URL deseada
+                } else {
+                    // Manejo de otros casos
+                    console.log('No se pudo eliminar la cuenta temporal o message != 1');
+                }
 
                 if (!response.ok) {
                     throw new Error("Error al eliminar la cuenta");
