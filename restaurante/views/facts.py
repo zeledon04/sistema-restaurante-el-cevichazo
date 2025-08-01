@@ -183,7 +183,7 @@ def guardar_Factura_Unica(request):
                         fechaventa=timezone.now(),
                     )
                     
-            imprimir(factura.facturaid)        
+            imprimir(factura.facturaid, 0)        
             
             cerrar_mesa = None
             if cuentaSeleccionada:
@@ -218,15 +218,19 @@ from escpos.printer import Win32Raw
  # para convertir fecha si usas timezone
 from PIL import Image
 
-def imprimir(facturaid):
+def imprimir_factura(request, facturaid):
+    if request.method == 'POST': # 0 para original, 1 para copia
+        imprimir(facturaid, 1)
+        return JsonResponse({"success": True, "message": "Factura enviada a la impresora"})
+    return JsonResponse({"success": False, "message": "Método no permitido"})
+
+def imprimir(facturaid, tipo):
     try:
-        printer = Win32Raw("POS")
-        
         factura = Facturas.objects.get(facturaid=facturaid)
         detalles_platos = Detallefacturaplato.objects.filter(facturaid=factura)
         detalles_productos = Detallefacturaproducto.objects.filter(facturaid=factura)
         opc = Opciones.objects.first()
-        
+        printer = Win32Raw(opc.nombreimpresora) 
         logo_path = os.path.join(settings.BASE_DIR, "restaurante/static/image/logo.bmp")
         if os.path.exists(logo_path):
 
@@ -248,8 +252,13 @@ def imprimir(facturaid):
 
         printer.text(f"Cliente: {factura.clientenombre}\n")
         
-        fecha_local = timezone.now()
-        printer.text(f"Fecha: {fecha_local.strftime('%d/%m/%Y %H:%M')}\n")
+        if tipo == 1:
+            printer.text("Fecha: " + factura.fecha.strftime('%d/%m/%Y %H:%M') + "\n")
+        else:
+            fecha_local = timezone.now()
+            printer.text(f"Fecha: {fecha_local.strftime('%d/%m/%Y %H:%M')}\n")
+        if tipo == 1:
+            printer.text("Copia\n")
         printer.set(align='left')
         printer.text("--------------------------------\n")
 
@@ -289,8 +298,8 @@ def imprimir(facturaid):
 
         printer.text("--------------------------------\n")
         total_line = f"Total:{f'C${total:.2f}'.rjust(26)}"
-        
-        tasa_cambio_line = f"Tasa de Cambio: {f'C${factura.tasacambio}':>15}"
+
+        tasa_cambio_line = f"Tasa de Cambio: {f'C${float(factura.tasacambio):.2f}':>16}"
         pago_line = f"Pago en Dólares: {f'${factura.dolares:.2f}':>15}"
         pago_line2 = f"Pago en Córdobas:  {f'C${factura.cordobas:.2f}':>13}"
         # Cálculo del cambio
@@ -311,8 +320,9 @@ def imprimir(facturaid):
         printer.text(opc.mensaje)
         
         printer.text("\n\n\n\n\n\n")
-        printer.cashdraw(2)
-        printer.close()  # Cerrar la impresora
+        if tipo == 0:
+            printer.cashdraw(2)
+        printer.close()
 
     except Exception as e:
         pass

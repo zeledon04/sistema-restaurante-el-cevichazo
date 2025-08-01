@@ -117,4 +117,5 @@ urlpatterns = [
     path('usuarios/activarUsuario/<int:id>', usuarios.activarUsuario, name='activar_usuario'),
     
     path('respaldar-db/', respaldos.respaldar_db, name='respaldar_db'),
+    path('imprimir-factura/<int:facturaid>/', facts.imprimir_factura, name='imprimir_factura'),
 ]

@@ -12,10 +12,10 @@ from django.db import transaction
 from ..utils import admin_required, login_required
 @login_required
 def listarPlatos(request):
-    categorias = Categoriasproducto.objects.filter(estado=1)
+    
     platos = Platos.objects.filter(estado=1).select_related('categoriaid').order_by('-platoid')
     user_data = datosUser(request)
-    datos = {**user_data, 'categorias': categorias, 'platos': platos}
+    datos = {**user_data,'platos': platos}
         
     return render(request, 'pages/platos/listarPlatos.html', datos)
 
@@ -32,7 +32,8 @@ def listarPlatosInactivos(request):
 @transaction.atomic
 def agregarPlato(request):
     user_data = datosUser(request)
-    datos = {**user_data}
+    categorias = Categoriasproducto.objects.filter(estado=1)
+    datos = {**user_data, 'categorias': categorias}
 
     try:
         if request.method == 'POST':
