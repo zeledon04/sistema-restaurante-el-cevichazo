@@ -7,27 +7,18 @@
 
     <div class='flex justify-between items-center mb-5'>
 
-        {% comment %} <h1 class='text-3xl text-gray-600 font-bold'>Productos</h1> {% endcomment %}
         <div>
             <h1 class="text-3xl font-bold text-gray-900 mb-2">Control de Productos</h1>
             <p class="text-gray-600">Productos Disponibles</p>
         </div>
 
-        {% comment %} <input 
-            type="text"
-            id="filtroNombre"
-            placeholder='Nombre'
-            class='p-2 bg-gray-300 outline-none rounded-lg w-[18%]'
-            oninput="filtrarProductos()"
-        /> {% endcomment %}
-
         <input 
-            id="searchTerm"
-            onkeyup="doSearch()"
+            id="filtroNombre"
             placeholder='Search by name...'
             value=""
             class='p-2 bg-gray-300 outline-none rounded-lg w-[18%]'
             onChange=""
+            oninput="filtrarProductos()"
         />
 
 

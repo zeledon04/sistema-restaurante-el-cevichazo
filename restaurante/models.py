@@ -33,7 +33,7 @@ class Cuentastemporales(models.Model):
 
 class Detallecuentatemporalplato(models.Model):
     detalleid = models.AutoField(db_column='detalleId', primary_key=True, blank=True)  # Field name made lowercase.
-    cuentatemporalid = models.ForeignKey(Cuentastemporales, models.DO_NOTHING, db_column='cuentaTemporalId')  # Field name made lowercase.
+    cuentatemporalid = models.ForeignKey(Cuentastemporales, on_delete=models.CASCADE, db_column='cuentaTemporalId')  # Field name made lowercase.
     platoid = models.ForeignKey('Platos', models.DO_NOTHING, db_column='platoId')  # Field name made lowercase.
     cantidad = models.IntegerField()
 
@@ -44,7 +44,7 @@ class Detallecuentatemporalplato(models.Model):
 
 class Detallecuentatemporalproducto(models.Model):
     detalleid = models.AutoField(db_column='detalleId', primary_key=True, blank=True)  # Field name made lowercase.
-    cuentatemporalid = models.ForeignKey(Cuentastemporales, models.DO_NOTHING, db_column='cuentaTemporalId')  # Field name made lowercase.
+    cuentatemporalid = models.ForeignKey(Cuentastemporales, on_delete=models.CASCADE, db_column='cuentaTemporalId')  # Field name made lowercase.
     productoid = models.ForeignKey('Productos', models.DO_NOTHING, db_column='productoId')  # Field name made lowercase.
     cantidad = models.IntegerField()
 
@@ -59,7 +59,8 @@ class Detallefacturaplato(models.Model):
     platoid = models.ForeignKey('Platos', models.DO_NOTHING, db_column='platoId')  # Field name made lowercase.
     cantidad = models.IntegerField()
     preciounitario = models.FloatField(db_column='precioUnitario')  # Field name made lowercase.
-
+    estado = models.TextField(blank=True, null=True)  # This field type is a guess.
+    
     class Meta:
         managed = False
         db_table = 'detalleFacturaPlato'
@@ -71,7 +72,8 @@ class Detallefacturaproducto(models.Model):
     productoid = models.ForeignKey('Productos', models.DO_NOTHING, db_column='productoId')  # Field name made lowercase.
     cantidad = models.IntegerField()
     preciounitario = models.FloatField(db_column='precioUnitario')  # Field name made lowercase.
-
+    estado = models.TextField(blank=True, null=True)  # This field type is a guess.
+    preciocompra = models.FloatField()
     class Meta:
         managed = False
         db_table = 'detalleFacturaProducto'
@@ -90,6 +92,7 @@ class Facturas(models.Model):
     tasacambio = models.TextField(blank=True, null=True)  # This field type is a guess.
     cajaid = models.IntegerField(db_column='cajaId', blank=True, null=True)  # Field name made lowercase.
     motivo = models.TextField(blank=True, null=True)
+    numref = models.TextField(db_column='numRef', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -129,6 +132,7 @@ class Mesas(models.Model):
     numero = models.IntegerField()
     estado = models.IntegerField(blank=True, null=True)
     mesero = models.IntegerField()
+    fecha = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -144,7 +148,8 @@ class Platos(models.Model):
     updated_at = models.DateTimeField(blank=True, null=True)
     estado = models.IntegerField(blank=True, null=True)
     categoriaid = models.ForeignKey(Categoriasproducto, models.DO_NOTHING, db_column='categoriaId', blank=True)  # Field name made lowercase.
-
+    tiempo = models.TextField(blank=True, null=True)  # This field type is a guess.
+    
     class Meta:
         managed = False
         db_table = 'platos'
@@ -172,6 +177,8 @@ class Usuarios(models.Model):
     rol = models.IntegerField()
     user = models.TextField()
     contra = models.TextField()
+    telefono = models.TextField(blank=True, null=True)
+    estado = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -218,6 +225,7 @@ class Opciones(models.Model):
     telefono = models.TextField(blank=True, null=True)
     mensaje = models.TextField(blank=True, null=True)
     numeroruc = models.TextField(db_column='numeroRUC', blank=True, null=True)  # Field name made lowercase.
+    nombreimpresora = models.TextField(db_column='nombreImpresora', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -225,13 +233,14 @@ class Opciones(models.Model):
 
 class Cocinas(models.Model):
     cocinaid = models.AutoField(db_column='cocinaId', primary_key=True)  # Field name made lowercase.
-    hora = models.TimeField(auto_now_add=True)
-    estado = models.IntegerField(default=0) # 0 = Pendiente, 1 = Listo, 2 = En proceso
+    hora = models.DateTimeField(blank=True, null=True)
+    horapreparacion = models.TextField(db_column='horaPreparacion', blank=True, null=True)  # Field name made lowercase.
+    horafinalizada = models.TextField(db_column='horaFinalizada', blank=True, null=True)  # Field name made lowercase.
+    estado = models.IntegerField()
     mesaid = models.ForeignKey('Mesas', models.DO_NOTHING, db_column='mesaId', blank=True, null=True)  # Field name made lowercase.
     platoid = models.ForeignKey('Platos', models.DO_NOTHING, db_column='platoId')  # Field name made lowercase.
-    horapreparacion = models.TimeField(db_column='horaPreparacion', blank=True, null=True)  # Field name made lowercase.
-    horafinalizada = models.TimeField(db_column='horaFinalizada', blank=True, null=True)  # Field name made lowercase.
-
+    cliente = models.TextField(blank=True, null=True)
+    
     class Meta:
         managed = False
         db_table = 'cocinas'

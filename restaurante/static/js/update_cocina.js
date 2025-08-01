@@ -20,27 +20,10 @@ function actualizarVistaCocina(data) {
     
     data.datos.forEach(cocina => {
         // Si no hemos registrado una hora de inicio para esta cocina, la agregamos
-        let horaInicioStr = null;
 
-        if (cocina.estado === 0){
-            horaInicioStr = cocina.hora;
-        } else if (cocina.estado === 2){
-            horaInicioStr = cocina.horapreparacion;
-        } else if (cocina.estado === 1){
-            horaInicioStr = cocina.horafinalizada;
-        }
+        const fechaLocal = new Date(cocina.hora.replace(' ', 'T'));  // -> Date válido
+        const hora = fechaLocal.toISOString();
 
-        if (horaInicioStr) {
-            const nuevaHora = new Date(horaInicioStr);
-            const actual = timestartMap[cocina.cocinaid];
-
-            // Actualiza si no existe, o si el estado cambió
-            if (!actual || Math.abs(actual.getTime() - nuevaHora.getTime()) > 1000) {
-                timestartMap[cocina.cocinaid] = nuevaHora;
-            }
-        }
-
-        
         const estilo = obtenerEstilosPorEstado(cocina.estado);
         const card  = document.createElement("div");
         card .classList.add("flex",  "flex-col", "justify-between", "rounded-lg");
@@ -72,7 +55,7 @@ function actualizarVistaCocina(data) {
 
                 <div class="absolute top-2 left-2">
                     <div class="bg-black/60 rounded-full px-2 text-white border-0">
-                      ${cocina.mesa ? "# "+cocina.mesa : "Sin Mesa"}
+                      ${cocina.mesa ? "# " + cocina.mesa : "Sin Mesa"}
                     </div>
                 </div>
 
@@ -123,7 +106,7 @@ function actualizarVistaCocina(data) {
                                 <svg class="size-3 w-3 h-3" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                 </svg>
-                                <span class="hora-viva" data-id="${cocina.cocinaid}">00:00:00</span>
+                                <span class="hora-viva" data-hora="${hora}"></span>
                             </div>`
                             : `<span class="text-sm font-medium text-green-600">¡Servir ahora!</span>`
                             }
@@ -160,8 +143,8 @@ function actualizarVistaCocina(data) {
                 nuevoEstado = 2;
             } else if (e.currentTarget.innerText.includes("En Proceso")) {
                 nuevoEstado = 1;
-            } else {
-                return;
+            } else if (e.currentTarget.innerText.includes("Listo")) {
+                nuevoEstado = 3
             }
 
             await fetch(`/cambiar-estado-cocina/${cocinaId}/`, {
@@ -170,9 +153,9 @@ function actualizarVistaCocina(data) {
                     "Content-Type": "application/json",
                     "X-CSRFToken": getCookie("csrftoken"),
                 },
-                body: JSON.stringify({ estado: nuevoEstado })
+                body: JSON.stringify({ estado: nuevoEstado }),
+                
             });
-
             // Ya que el polling actualiza cada 0.5s, no necesitas esto,
             // pero si quieres forzar la actualización inmediata:
             fetch('/cocina/estado/')
@@ -182,29 +165,37 @@ function actualizarVistaCocina(data) {
     });
 }
 
-// Función para actualizar la hora viva
-function actualizarHora() {
+function calcularTiempoDesde(fechaStr) {
+    const fecha = new Date(fechaStr);
     const ahora = new Date();
+    const diff = Math.floor((ahora - fecha) / 1000); // diferencia en segundos
 
-    // Actualiza cada span con la clase 'hora-viva'
-    // usando el timestartMap para calcular la diferencia de tiempo
-    document.querySelectorAll('.hora-viva').forEach(span => {
-        const id = span.dataset.id;
-        const inicio = timestartMap[id];
-        if (!inicio) return;
+    const horas = Math.floor(diff / 3600);
+    const minutos = Math.floor((diff % 3600) / 60);
+    const segundos = diff % 60;
 
-        const diff = Math.floor((ahora - inicio) / 1000); // segundos
-        const horas = Math.floor(diff / 3600).toString().padStart(2, '0');
-        const minutos = Math.floor((diff % 3600) / 60).toString().padStart(2, '0');
-        const segundos = (diff % 60).toString().padStart(2, '0');
+    if (horas > 0) {
+      return `${horas}h ${minutos}m ${segundos}s`;
+    } else if (minutos > 0) {
+      return `${minutos}m ${segundos}s`;
+    } else {
+      return `${segundos}s`;
+    }
+  }
 
-        span.textContent = `${horas}:${minutos}:${segundos}`;
+  function actualizarTiempos() {
+    const elementos = document.querySelectorAll('.hora-viva');
+    elementos.forEach(el => {
+      const hora = el.dataset.hora;
+      el.textContent = calcularTiempoDesde(hora);
     });
-}
+  }
 
-// Inicia hora viva actualizada
-setInterval(actualizarHora, 1000);
-actualizarHora(); // llamar al principio
+  // Actualiza cada segundo
+  setInterval(actualizarTiempos, 1000);
+  // Llama inmediatamente al cargar
+  actualizarTiempos();
+
 
 // Polling cada 1 segundo
 setInterval(() => {
@@ -215,7 +206,7 @@ setInterval(() => {
             // console.log("Datos recibidos:", data)
         )
         .catch(err => console.error('Error al cargar pedidos:', err));
-}, 2000); 
+}, 2500); 
 
 // Función para obtener estilos según el estado, solo para eso.
 function obtenerEstilosPorEstado(estado) {

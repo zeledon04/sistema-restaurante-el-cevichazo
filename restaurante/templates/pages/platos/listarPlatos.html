@@ -10,15 +10,6 @@
                 <p class="text-gray-600">Platillos Disponibles</p>
             </div>
 
-            <input 
-                id="searchTerm"
-                onkeyup="doSearch()"
-                placeholder='Search by name...'
-                value=""
-                class='p-2 bg-gray-300 outline-none rounded-lg w-[18%]'
-                onChange=""
-            />
-
             <a href="{% url "listar_platos_inactivos" %}" 
                 class="bg-gradient-to-l from-yellow-600 via-yellow-500 to-yellow-300 hover:from-yellow-700 hover:via-yellow-600 hover:to-yellow-400 
                     rounded-lg w-[18%] h-10 p-2 text-gray-100 font-semibold flex items-center justify-center  gap-4
@@ -31,12 +22,6 @@
                 Ver Inactivos
             </a>
 
-            <select id="filtroCategoria" class="p-2 bg-gray-300 outline-none rounded-lg w-[18%] text-gray-700" onchange="filtrarProductos()">
-                <option value="">Filtrar por categoría</option>
-                {% for categoria in categorias %}
-                <option value="{{ categoria.categoriaid }}">{{ categoria.nombre }}</option>
-                {% endfor %}
-            </select>
 
             <a href="{% url "agregar_plato" %}" class="inline-flex items-center px-4 py-2 relative bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold bg-amber-500 rounded-md shadow-md cursor-pointer transition-all duration-200 hover:shadow-lg active:scale-95">
                 <svg class="size-6 w-6 h-6 mr-2 whitespace-nowrap" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

@@ -87,8 +87,7 @@ os.makedirs(db_path, exist_ok=True)  # crea la carpeta si no existe
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'restaurante.db',
-        # 'NAME': os.path.join(db_path, 'restaurante.db'),
+        'NAME': os.path.join(db_path, 'restaurante.db'),
     }
 }
 
@@ -136,7 +135,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     # BASE_DIR / "theme/static",
     os.path.join(BASE_DIR, "restaurante", "static"),
-    # os.path.join(os.environ.get('LOCALAPPDATA'), 'Restaurante', 'media'),
+    os.path.join(os.environ.get('LOCALAPPDATA'), 'Restaurante', 'media'),
 ]
 
 # Default primary key field type

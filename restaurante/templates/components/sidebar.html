@@ -17,12 +17,9 @@
                     Analíticas
                 </a>
             </li>
-
             <li>
-                <button class='boton w-full flex cursor-pointer items-center justify-between gap-4 py-2 px-4 rounded-lg text-white hover:bg-gray-200 hover:text-cyan-600 bg-transparent font-semibold transition-all'>
-                    <span class='gap-4 flex items-center'> 
-
-                        <svg class="size-6" fill="currentColor" viewBox="0 0 50.00 50.00">
+                <a href="{% url 'listar_mesas' %}" class="menu-link boton flex items-center cursor-pointer gap-4 py-2 px-4 rounded-lg text-white hover:bg-gray-200 hover:text-cyan-600 bg-transparent font-semibold transition-all">
+                     <svg class="size-6" fill="currentColor" viewBox="0 0 50.00 50.00">
 
                             <g id="SVGRepo_bgCarrier" stroke-width="0"/>
 
@@ -37,31 +34,9 @@
                         </svg>
 
                         Mesas
-                    </span>
-
-                    <svg class="arrow size-5 transition-all flex items-center"  fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round"  stroke-linejoin="round"  d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
-                    </svg>
-                </button>
-
-                <ul class="subMenu hidden flex-col pl-4 transition-all">
-                    <li>
-                        <a
-                            href="{% url 'listar_mesas' %}"
-                            class='menu-link py-2 px-4 border-l border-gray-800 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-800 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-teal-600 hover:text-white transition-all'
-                        >Mesas</a>
-                          
-                    </li>
-
-                    <li>
-                        <a
-                            href="#"
-                            class='menu-link py-2 px-4 border-l border-gray-800 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-800 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-teal-600 hover:text-white transition-all'
-                        >Historial Mesas</a>
-                    </li>
-
-                </ul>
+                </a>
             </li>
+
 
             <li>
                 <a href="{% url "listar_cocinas" %}" class="menu-link boton flex items-center cursor-pointer gap-4 py-2 px-4 rounded-lg text-white hover:bg-gray-200 hover:text-cyan-600 bg-transparent font-semibold transition-all">
@@ -77,6 +52,36 @@
                     Cocina
                 </a>
             </li>
+
+            {% if rolid == 1 %}
+            <li>
+                <a
+                    href="{% url "listar_cajas" %}"
+                    class='menu-link boton flex items-center gap-4 py-2 px-4 rounded-lg text-white hover:bg-gray-200 hover:text-cyan-600 bg-transparent font-semibold transition-all'>
+                    <svg class="size-6" fill="currentColor" viewBox="0 0 491.52 491.52">
+                    <g>
+                        <g>
+                            <g>
+                                <rect x="81.92" y="184.32" width="122.88" height="143.36"/>
+                                <rect x="245.76" y="163.84" width="40.96" height="40.96"/>
+                                <rect x="307.2" y="163.84" width="40.96" height="40.96"/>
+                                <rect x="368.64" y="163.84" width="40.96" height="40.96"/>
+                                <rect x="245.76" y="225.28" width="40.96" height="40.96"/>
+                                <rect x="307.2" y="225.28" width="40.96" height="40.96"/>
+                                <rect x="368.64" y="225.28" width="40.96" height="40.96"/>
+                                <rect x="245.76" y="286.72" width="40.96" height="40.96"/>
+                                <rect x="307.2" y="286.72" width="40.96" height="40.96"/>
+                                <rect x="368.64" y="286.72" width="40.96" height="40.96"/>
+                                <path d="M471.04,102.4h-40.96V20.48C430.08,9.169,420.911,0,409.6,0H245.76c-11.311,0-20.48,9.169-20.48,20.48v81.92h-81.92     V61.44h40.96V0H61.44v61.44h40.96v40.96H20.48C9.169,102.4,0,111.569,0,122.88v266.24c0,11.311,9.169,20.48,20.48,20.48h20.48     v61.44c0,11.311,9.169,20.48,20.48,20.48h368.64c11.311,0,20.48-9.169,20.48-20.48V409.6h20.48c11.311,0,20.48-9.169,20.48-20.48     V122.88C491.52,111.569,482.351,102.4,471.04,102.4z M409.6,450.56H81.92V409.6H409.6V450.56z M450.56,368.64h-20.48H61.44H40.96     V143.36h204.8c11.311,0,20.48-9.169,20.48-20.48V40.96h122.88v81.92c0,11.311,9.169,20.48,20.48,20.48h40.96V368.64z"/>
+                            </g>
+                        </g>
+                    </g>
+                    </svg>
+                        
+                    Cajas
+                </a>
+            </li>
+            {% endif %}
 
             <li>
                 <button class='boton w-full flex cursor-pointer items-center justify-between gap-4 py-2 px-4 rounded-lg text-white hover:bg-gray-200 hover:text-cyan-600 bg-transparent font-semibold transition-all'>
@@ -114,7 +119,7 @@
                         >Products</a>
                           
                     </li>
-                    {% comment %} {%if rolid == 1 %} {% endcomment %}
+                    {%if rolid == 1 %}
                     <li>
                         <a
                             href="{% url "listar_categorias" %}"
@@ -123,11 +128,12 @@
                     </a>
                     </li>
 
-                    {% comment %} {% endif %} {% endcomment %}
+                    {% endif %}
 
                 </ul>
             </li>
-
+            
+            {% if rolid == 1 %}
             <li>
                 <button class='boton w-full flex cursor-pointer items-center justify-between gap-4 py-2 px-4 rounded-lg text-white hover:bg-gray-200 hover:text-cyan-600 bg-transparent font-semibold transition-all'>
                     <span class='gap-4 flex items-center'> 
@@ -147,16 +153,16 @@
                 <ul class="subMenu hidden flex-col pl-4 transition-all">
                     <li>
                         <a
-                            href="#"
-                            class='menu-link py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-gray-900 hover:text-white transition-all'
+                            href="{% url "historial_facturas" %}"
+                            class='menu_link py-2 px-4 border-l border-gray-800 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-800 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-teal-600 hover:text-white transition-all'
                         >Rep. Factura</a>
                           
                     </li>
                     {% comment %} {%if rolid == 1 %} {% endcomment %}
                     <li>
                         <a
-                            href="#"
-                            class='menu_link py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-gray-900 hover:text-white transition-all'
+                            href="{% url 'historial_ventas' %}"
+                            class='menu_link py-2 px-4 border-l border-gray-800 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-800 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-teal-600 hover:text-white transition-all'
                         >Rep. Ventas
                     </a>
                     </li>
@@ -164,41 +170,12 @@
 
                 </ul>
             </li>
-            
-            {% comment %} {%if rolid == 1 %} {% endcomment %}
+            {% endif %}
 
+            {%if rolid == 1 %}
             <li>
                 <a
-                    href="{% url "listar_cajas" %}"
-                    class='menu-link boton flex items-center gap-4 py-2 px-4 rounded-lg text-white hover:bg-gray-200 hover:text-cyan-600 bg-transparent font-semibold transition-all'
-                >
-                    <svg class="size-6" fill="currentColor" viewBox="0 0 491.52 491.52">
-                    <g>
-                        <g>
-                            <g>
-                                <rect x="81.92" y="184.32" width="122.88" height="143.36"/>
-                                <rect x="245.76" y="163.84" width="40.96" height="40.96"/>
-                                <rect x="307.2" y="163.84" width="40.96" height="40.96"/>
-                                <rect x="368.64" y="163.84" width="40.96" height="40.96"/>
-                                <rect x="245.76" y="225.28" width="40.96" height="40.96"/>
-                                <rect x="307.2" y="225.28" width="40.96" height="40.96"/>
-                                <rect x="368.64" y="225.28" width="40.96" height="40.96"/>
-                                <rect x="245.76" y="286.72" width="40.96" height="40.96"/>
-                                <rect x="307.2" y="286.72" width="40.96" height="40.96"/>
-                                <rect x="368.64" y="286.72" width="40.96" height="40.96"/>
-                                <path d="M471.04,102.4h-40.96V20.48C430.08,9.169,420.911,0,409.6,0H245.76c-11.311,0-20.48,9.169-20.48,20.48v81.92h-81.92     V61.44h40.96V0H61.44v61.44h40.96v40.96H20.48C9.169,102.4,0,111.569,0,122.88v266.24c0,11.311,9.169,20.48,20.48,20.48h20.48     v61.44c0,11.311,9.169,20.48,20.48,20.48h368.64c11.311,0,20.48-9.169,20.48-20.48V409.6h20.48c11.311,0,20.48-9.169,20.48-20.48     V122.88C491.52,111.569,482.351,102.4,471.04,102.4z M409.6,450.56H81.92V409.6H409.6V450.56z M450.56,368.64h-20.48H61.44H40.96     V143.36h204.8c11.311,0,20.48-9.169,20.48-20.48V40.96h122.88v81.92c0,11.311,9.169,20.48,20.48,20.48h40.96V368.64z"/>
-                            </g>
-                        </g>
-                    </g>
-                    </svg>
-                        
-                    Cajas
-                </a>
-            </li>
-            
-            <li>
-                <a
-                    href="#"
+                    href="{% url "listar_usuarios" %}"
                     class='menu-link boton flex items-center gap-4 py-2 px-4 rounded-lg text-white hover:bg-gray-200 hover:text-cyan-600 bg-transparent font-semibold transition-all'
                 >
                 <svg class="size-6"  fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -208,30 +185,44 @@
                 Usuarios
                 </a>
             </li>
-
-            <li>
-                <a href="{% url "opciones" %}" class="menu-link boton flex items-center cursor-pointer gap-4 py-2 px-4 rounded-lg text-white hover:bg-gray-200 hover:text-cyan-600 bg-transparent font-semibold transition-all">
-                    <svg class="size-6 font-bold" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                    </svg>
-                      
-                    Configuración
-                </a>
-            </li>
-            
-            {% comment %} {% endif %} {% endcomment %}
+            {% endif %}
 
         </ul>
 
     </div>
 
     <nav>
+        {% if rolid == 1 %}
+        <a href="{% url "opciones" %}" class="menu-link boton flex items-center cursor-pointer gap-4 py-2 px-4 rounded-lg text-white hover:bg-gray-200 hover:text-cyan-600 bg-transparent font-semibold transition-all">
+
+            <svg class="size-6 font-bold" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+            </svg>
+
+                        
+            Configuración
+        </a>
+        {% endif %}
         <a onclick="recargarPagina()" class='flex items-center gap-4 py-2 px-4 rounded-lg cursor-pointer text-white hover:bg-gray-200 hover:text-cyan-600 bg-transparent font-semibold transition-all'>
             <svg class="size-6"  fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
             </svg>
                 Recargar
+        </a>
+        <a onclick="respaldarDB()" class="menu-link boton flex items-center cursor-pointer gap-4 py-2 px-4 rounded-lg text-white hover:bg-gray-200 hover:text-cyan-600 bg-transparent font-semibold transition-all">
+                    
+            <svg class="size-6"  fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path d="M4 6V12C4 12 4 15 11 15C11.5925 15 12.1349 14.9785 12.6313 14.9392" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M18 6V12" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M11 3C18 3 18 6 18 6C18 6 18 9 11 9C4 9 4 6 4 6C4 6 4 3 11 3Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M11 21C4 21 4 18 4 18V12" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M22.6664 17.6667C22.0476 16.097 20.6345 15 18.9901 15C17.2318 15 15.7377 16.2545 15.1968 18" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M20.9951 17.6667H22.6664V17.6667C22.8507 17.6667 23.0001 17.5173 23.0001 17.333V15.4445" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M15.3336 20.3333C15.9524 21.903 17.3655 23 19.0099 23C20.7682 23 22.2623 21.7455 22.8032 20" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M17.0049 20.3333H15.3336V20.3333C15.1493 20.3333 14.9999 20.4827 14.9999 20.667V22.5555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>  
+            Respaldo
         </a>
         <a href="{% url "logout" %}" class='flex items-center gap-4 py-2 px-4 rounded-lg cursor-pointer text-white hover:bg-gray-200 hover:text-cyan-600 bg-transparent font-semibold transition-all'>
             <svg class="size-6"  fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -256,6 +247,55 @@
     function recargarPagina() {
         location.reload();
     }
+    function respaldarDB() {
+        fetch('/respaldar-db/', {
+            method: 'POST',
+            headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Éxito!',
+                    text: data.message,
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Errwwor',
+                    text: data.message
+                });
+            }
+        })
+        .catch(err => {
+            Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se pudo conectar al servidor.'
+            });
+        });
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+                }
+            }
+            }
+            return cookieValue;
+        }
+    }
+
 </script>
 
 

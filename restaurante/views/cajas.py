@@ -1,21 +1,16 @@
 from decimal import Decimal
 from django.shortcuts import get_object_or_404, render
-import os
-from django.conf import settings
-# Create your views here.
 from django.http import JsonResponse
-from restaurante.models import Cajas, Denominacionescaja, Detallefacturaproducto, Detallefacturaplato, Facturas, Lotesproductos, Opciones, Productos, Usuarios
+from restaurante.models import Cajas, Denominacionescaja, Detallefacturaproducto, Detallefacturaplato, Facturas, Mesas, Opciones, Usuarios
 import json
 from django.utils import timezone
 from django.db import transaction
 from restaurante.view import datosUser
-
 from ..utils import admin_required, login_required
 from django.db.models import F, Sum, ExpressionWrapper, FloatField
 from django.core.paginator import Paginator
-from datetime import  datetime
 from django.http import JsonResponse
-from django.utils.timezone import now
+from django.utils import timezone
 
 from ..view import datosUser
 
@@ -74,14 +69,15 @@ def abrir_caja(request):
 
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
-@admin_required
-def listarCajas(request):
-    user_data = datosUser(request)
-    return render(request, 'pages/cajas/listarCajas.html', user_data)
-
-"""
+@transaction.atomic
 @login_required
 def cerrar_caja(request):
+    mesas = Mesas.objects.filter(estado=1).count()
+    if mesas > 0:
+        return JsonResponse({'success': False, 'message': 'No se puede cerrar la caja mientras haya mesas ocupadas.'}, status=400)
+
+    data = json.loads(request.body)
+    billetes = data.get('billetes', [])
     if request.method == 'POST':
         caja = Cajas.objects.filter(usuarioid=request.session['user_id'], estado=1).first()
         if not caja:
@@ -106,26 +102,28 @@ def cerrar_caja(request):
                     estado=1
                 )
 
-            # Obtener tasa de cambio
             tasa = Opciones.objects.first()
             tasa_dolar = tasa.tasacambio
 
-            # Calcular ingresos por facturas
             totalingresos = Decimal('0')
+            
             facturas = Facturas.objects.filter(cajaid=caja.cajaid, usuarioid=request.session['user_id'], estado=1)
 
             for factura in facturas:
-                subtotal_productos = Detallefacturas.objects.filter(facturaid=factura, estado=1).aggregate(
-                    total=Sum(ExpressionWrapper(F('precio') * F('cantidad'), output_field=FloatField()))
+
+                
+                subtotal_productos = Detallefacturaproducto.objects.filter(facturaid=factura, estado=1).aggregate(
+                    total=Sum(ExpressionWrapper(F('preciounitario') * F('cantidad'), output_field=FloatField()))
                 )['total'] or 0
 
-                subtotal_ropa = Detallefacturasropa.objects.filter(facturaid=factura, estado=1).aggregate(
-                    total=Sum(ExpressionWrapper(F('precio') * F('cantidad'), output_field=FloatField()))
+                subtotal_platos = Detallefacturaplato.objects.filter(facturaid=factura, estado=1).aggregate(
+                    total=Sum(ExpressionWrapper(F('preciounitario') * F('cantidad'), output_field=FloatField()))
                 )['total'] or 0
+                
 
-                total_factura = Decimal(subtotal_productos) + Decimal(subtotal_ropa)
+
+                total_factura = Decimal(str(subtotal_productos)) + Decimal(str(subtotal_platos))
                 totalingresos += total_factura
-
             # Actualizar datos de caja
             caja.estado = 0
             caja.cordobasfinal = total_cordobas
@@ -146,16 +144,15 @@ def cerrar_caja(request):
                 caja.sobrante = 0
                 caja.faltante = 0
 
-            caja.fechaciere = now()
+            caja.fechaciere = timezone.now()
             caja.save()
-
+            
             return JsonResponse({'success': True})
 
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
 
     return JsonResponse({'error': 'Método no permitido'}, status=405)
-
 
 @admin_required
 def listarCajas(request):
@@ -174,6 +171,7 @@ def listarCajas(request):
     
     datos = {**user_data, 'cajas': page_obj, 'usuarios': Usuarios.objects.all()}
     return render(request, 'pages/cajas/listarCajas.html', datos)
+
 
 @admin_required
 def detalleCaja(request, cajaid):
@@ -216,4 +214,3 @@ def detalleCaja(request, cajaid):
     }
 
     return render(request, 'pages/cajas/detalleCaja.html', datos)
-"""

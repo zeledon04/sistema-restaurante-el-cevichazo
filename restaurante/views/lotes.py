@@ -3,13 +3,13 @@ from datetime import datetime
 from ..models import Lotesproductos, Productos, Usuarios
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
-from ..utils import admin_required
+from ..utils import admin_required, login_required
 
 from django.db.models import Case, When, Value, IntegerField
 
 from ..view import datosUser
 
-@admin_required
+@login_required
 def listarLotes(request, id):
     producto = Productos.objects.get(pk=id)
     lotes = (
@@ -46,7 +46,6 @@ def agregarLote(request, id):
         producto.stock = totalStock
         
         if float(precioventa) < float(preciocompraunitario):
-            print("El precio de venta no puede ser menor al precio de compra.")
             messages.error(request, "Verifique los datos. El precio de venta no puede ser menor al precio de compra.")
             return redirect('agregar_lote', id=producto.productoid)
     
@@ -60,6 +59,12 @@ def agregarLote(request, id):
             pass
         else:
             producto.precio = precioventa
+            
+        if Lotesproductos.objects.filter(productoid=producto, estado=1).exists():
+            pass
+        else:
+            producto.precio = precioventa
+            estado = 1
             
         lote = Lotesproductos(
             fechaingreso=datetime.today().date(),

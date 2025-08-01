@@ -1,5 +1,3 @@
-# Esta vista funge/funciona tanto para la tabla productos como para la tabla platos.
-# from farmacia.views import datosUser
 from ..models import Categoriasproducto
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
@@ -7,7 +5,7 @@ from ..utils import admin_required, login_required
 
 from ..view import datosUser
 
-@login_required
+@admin_required
 def listarCategorias(request):
     user_data = datosUser(request)
     categorias = Categoriasproducto.objects.filter(estado=1)
@@ -20,12 +18,12 @@ def listarCategoriasInactivas(request):
     user_data = datosUser(request)
     return render(request, 'pages/categorias/listarCategoriasInactivas.html', {**user_data, 'categorias': categorias})
 
+
 @admin_required
 def agregarCategoria(request):
     if request.method == 'POST':
         nombre = request.POST.get('nombre')
-        
-        # Validación de campos
+    
         categoria = Categoriasproducto(
             nombre=nombre,
             estado=1
@@ -45,10 +43,7 @@ def actualizarCategoria(request, id):
     
     if request.method == 'POST':
         nombre = request.POST.get('nombre')
-
-        # Actualizar los demás campos
         categoria.nombre = nombre
-
         categoria.save()
 
         messages.success(request, "Categoría actualizada correctamente!")

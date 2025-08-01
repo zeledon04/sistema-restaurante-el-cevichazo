@@ -7,8 +7,9 @@ from django.utils import timezone
 
 from restaurante.models import Cuentastemporales, Mesas, Usuarios
 from ..view import datosUser
-
+from ..utils import login_required
 # Create your views here.
+@login_required
 def listarMesas(request):
     user_data = datosUser(request)
 
@@ -36,7 +37,7 @@ def listarMesas(request):
             'numero': mesa.numero,
             'cliente': cuenta.clientenombre,
             'mesero': mesero_nombre,
-            'hora': cuenta.fechacreacion,
+            'hora': mesa.fecha,
         })
 
     return render(request, 'pages/mesas/listarMesas.html', {
@@ -44,7 +45,8 @@ def listarMesas(request):
         'mesas': mesas,
         'numMesas': cont
     })
-
+    
+@login_required
 @transaction.atomic
 def agregarMesa(request):
     if request.method == 'POST':
@@ -59,7 +61,7 @@ def agregarMesa(request):
 
         try:
             # Crear mesa
-            nueva_mesa = Mesas(numero=numero, mesero=mesero_id, estado=1)
+            nueva_mesa = Mesas(numero=numero, mesero=mesero_id, estado=1, fecha=timezone.now())
             nueva_mesa.save()
 
             # Crear cuenta temporal (factura temporal)
@@ -73,7 +75,7 @@ def agregarMesa(request):
             )
             cuenta.save()
 
-            return JsonResponse({'message': 'Mesa y cuenta temporal creadas exitosamente'})
+            return JsonResponse({'message': 'Mesa creada exitosamente'})
         
         except Exception as e:
             return JsonResponse({'error': f'Error al guardar: {str(e)}'}, status=500)

@@ -180,10 +180,13 @@ document.getElementById("btnCerrarCaja").addEventListener("click", function () {
                                 Swal.fire('Caja cerrada correctamente').then(() => {
                                     clearInterval(contadorInterval);
                                     document.getElementById("tiempo-abierta").textContent = "0m";
-                                    window.location.href = '/Dashboard';
+                                    window.location.href = '/dashboard';
                                 });
                             } else {
-                                Swal.fire('Error al cerrar la caja');
+                                Swal.fire({
+                                    title: data.message,
+                                    icon: 'error',
+                                });
                             }
                         });
                     }
