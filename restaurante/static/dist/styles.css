@@ -1,4 +1,4 @@
-/*! tailwindcss v4.1.11 | MIT License | https://tailwindcss.com */
+/*! tailwindcss v4.1.12 | MIT License | https://tailwindcss.com */
 @layer properties;
 @layer theme, base, components, utilities;
 @layer theme {
@@ -366,6 +366,9 @@
   .my-5 {
     margin-block: calc(var(--spacing) * 5);
   }
+  .my-6 {
+    margin-block: calc(var(--spacing) * 6);
+  }
   .my-8 {
     margin-block: calc(var(--spacing) * 8);
   }
@@ -516,6 +519,12 @@
   .h-\[50\%\] {
     height: 50%;
   }
+  .h-\[60vh\] {
+    height: 60vh;
+  }
+  .h-\[95\%\] {
+    height: 95%;
+  }
   .h-\[98\%\] {
     height: 98%;
   }
@@ -587,6 +596,9 @@
   }
   .w-6 {
     width: calc(var(--spacing) * 6);
+  }
+  .w-10 {
+    width: calc(var(--spacing) * 10);
   }
   .w-12 {
     width: calc(var(--spacing) * 12);
@@ -678,12 +690,6 @@
   .min-w-\[550px\] {
     min-width: 550px;
   }
-<<<<<<< HEAD
-  .min-w-\[600px\] {
-    min-width: 600px;
-  }
-=======
->>>>>>> factura_multiple
   .flex-1 {
     flex: 1;
   }
@@ -745,6 +751,9 @@
   }
   .flex-row {
     flex-direction: row;
+  }
+  .place-content-center {
+    place-content: center;
   }
   .items-center {
     align-items: center;
@@ -844,6 +853,9 @@
   .overflow-y-hidden {
     overflow-y: hidden;
   }
+  .overflow-y-scroll {
+    overflow-y: scroll;
+  }
   .rounded {
     border-radius: 0.25rem;
   }
@@ -892,13 +904,10 @@
     border-style: var(--tw-border-style);
     border-width: 2px;
   }
-<<<<<<< HEAD
-=======
   .border-t {
     border-top-style: var(--tw-border-style);
     border-top-width: 1px;
   }
->>>>>>> factura_multiple
   .border-t-0 {
     border-top-style: var(--tw-border-style);
     border-top-width: 0px;
@@ -939,9 +948,6 @@
   }
   .border-gray-300 {
     border-color: var(--color-gray-300);
-  }
-  .border-gray-500 {
-    border-color: var(--color-gray-500);
   }
   .border-gray-500\/30 {
     border-color: color-mix(in srgb, oklch(55.1% 0.027 264.364) 30%, transparent);
@@ -1589,22 +1595,10 @@
       border-width: 4px;
     }
   }
-  .before\:border-gray-900 {
-    &::before {
-      content: var(--tw-content);
-      border-color: var(--color-gray-900);
-    }
-  }
   .before\:border-teal-600 {
     &::before {
       content: var(--tw-content);
       border-color: var(--color-teal-600);
-    }
-  }
-  .before\:bg-gray-500 {
-    &::before {
-      content: var(--tw-content);
-      background-color: var(--color-gray-500);
     }
   }
   .before\:bg-gray-800 {

@@ -183,12 +183,15 @@ SELECT productoId, SUM(cantidadTotal) AS total_vendido
 FROM historialVentas
 GROUP BY productoId
 
-ALTER TABLE opciones ADD COLUMN numeroRUC TEXT
+ALTER TABLE platos ADD COLUMN tiempo TEXT
 
-SELECT * FROM platos
+SELECT * FROM cuentasTemporales
 
+SELECT * FROM mesas
 
-SELECT * FROM cocinas
+SELECT * FROM facturas
 
 INSERT INTO cocinas (hora, mesaId, platoId)
 VALUES ("09:38:10", 1, 3);
+
+ALTER TABLE cocinas ADD COLUMN cliente TEXT

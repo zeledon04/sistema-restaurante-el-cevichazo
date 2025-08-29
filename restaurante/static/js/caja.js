@@ -58,29 +58,29 @@ document.getElementById("btn-abrir-caja").addEventListener("click", function () 
         });
 });
 
-// 🧩 Función para generar una fila de inputs
+// Función para generar una fila de inputs
 function generarFilaBillete() {
     return `
-        <div class="fila-billete" style="margin-bottom: 10px; display: flex; gap: 5px;">
-            <input type="number" class="denominacion swal2-input" placeholder="Denominación" style="width: 100px;" />
-            <select class="tipo swal2-input" style="width: 120px;">
+        <div class="fila-billete" style="margin-bottom: 10px; display: flex; align-items:center; justify-content:space-between; gap: 5px; padding:5px; height:50px;">
+            <input type="number" class="denominacion swal2-input" placeholder="Denominación" style="width: 130px; height:100%;" />
+            <select class="tipo swal2-input" style="width: 140px; height:100%;">
                 <option value="cordobas">Córdobas</option>
                 <option value="dolares">Dólares</option>
             </select>
-            <input type="number" class="cantidad swal2-input" placeholder="Cantidad" style="width: 100px;" />
+            <input type="number" class="cantidad swal2-input" placeholder="Cantidad" style="width: 120px; height:100%;" />
         </div>
     `;
 }
 
 
-// ➕ Agrega una nueva fila
+// Agrega una nueva fila
 function agregarFilaBillete() {
     const container = document.getElementById("billetes-container");
     container.insertAdjacentHTML('beforeend', generarFilaBillete());
     actualizarTotales(); // recalcula totales cuando se agrega
 }
 
-// 🧮 Calcula totales en tiempo real
+// Calcula totales en tiempo real
 function actualizarTotales() {
     let totalCordobas = 0;
     let totalDolares = 0;
@@ -104,7 +104,7 @@ function actualizarTotales() {
     document.getElementById("total-dolares").textContent = totalDolares.toFixed(2);
 }
 
-// 🍪 Función auxiliar CSRF
+// Función auxiliar CSRF
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -203,13 +203,13 @@ document.getElementById("btnCerrarCaja").addEventListener("click", function () {
 // Función para generar una fila
 function generarFilaBilleteCierre() {
     return `
-        <div class="fila-billete-cierre" style="margin-bottom: 10px; display: flex; gap: 5px;">
-            <input type="number" class="denominacion swal2-input" placeholder="Denominación" style="width: 100px;" />
-            <select class="tipo swal2-input" style="width: 120px;">
+        <div class="fila-billete-cierre" style=" margin-bottom: 10px; display: flex; align-items:center; justify-content:space-between; gap: 5px; padding:5px; height:50px;">
+            <input type="number" class="denominacion" placeholder="Denominación" style="width: 130px; height:100%;" />
+            <select class="tipo" style="width: 140px; height:100%;">
                 <option value="cordobas">Córdobas</option>
                 <option value="dolares">Dólares</option>
             </select>
-            <input type="number" class="cantidad swal2-input" placeholder="Cantidad" style="width: 100px;" />
+            <input type="number" class="cantidad" placeholder="Cantidad" style="width: 120px; height:100%;" />
         </div>
     `;
 }

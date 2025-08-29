@@ -23,7 +23,9 @@ def agregarCuentas(request, id):
     for cuenta in cuentas:
         detalles_producto = Detallecuentatemporalproducto.objects.filter(cuentatemporalid=cuenta)
         detalles_plato = Detallecuentatemporalplato.objects.filter(cuentatemporalid=cuenta)
-
+        
+        print(cuenta.usuarioid.nombre)
+        
         detalles_por_cuenta[cuenta.cuentatemporalid]['productos'] = detalles_producto
         detalles_por_cuenta[cuenta.cuentatemporalid]['platos'] = detalles_plato
     

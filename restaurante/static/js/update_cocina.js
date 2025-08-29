@@ -206,7 +206,7 @@ setInterval(() => {
             // console.log("Datos recibidos:", data)
         )
         .catch(err => console.error('Error al cargar pedidos:', err));
-}, 2500); 
+}, 500); 
 
 // Función para obtener estilos según el estado, solo para eso.
 function obtenerEstilosPorEstado(estado) {
